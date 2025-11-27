@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${rol.id_rol != null and rol.id_rol > 0} ? 'Editar Rol - Codegol' : 'Registrar Rol - Codegol'"></title>
+
+    <link rel="stylesheet" href="/css/style_forms.css">
+</head>
+<body>
+
+    <header>
+        <a href="/roles" class="logo">
+            <img src="/imagenes/logo.jpg" alt="Logo Escuela de Fútbol Pinze" />
+        </a>
+        <a href="/roles" class="volver">Volver</a>
+    </header>
+
+    <div class="login-box">
+
+        <h1 th:text="${rol.id_rol != null and rol.id_rol > 0} ? 'Editar Rol' : 'Registrar Rol'"></h1>
+
+        <form th:action="@{/roles}" th:object="${rol}" method="post">
+
+            <input type="hidden" th:field="*{id_rol}">
+
+            <div class="Formgrupo">
+                <label>Nombre Rol</label>
+                <input type="text" th:field="*{rol_usuario}" required>
+            </div>
+
+            <button type="submit"
+                    th:text="${rol.id_rol != null and rol.id_rol > 0} ? 'Guardar Cambios' : 'Registrar'">
+            </button>
+        </form>
+    </div>
+</body>
+</html>

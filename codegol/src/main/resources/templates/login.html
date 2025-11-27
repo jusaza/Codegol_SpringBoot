@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inicio de sesión - Escuela de Fútbol Pinze</title>
+  <link rel="stylesheet" href="../css/styles_inicio_sesion.css">
+</head>
+<body>
+
+  <header>
+    <a href="../pagina original.html" class="logo" aria-label="Logo Escuela de Fútbol Pinze">
+      <img src="../imagenes/logo.jpg" alt="Logo Escuela de Fútbol Pinze" />
+    </a>
+    <a href="../pagina original.html" class="volver">Volver</a>
+  </header>
+
+<div class="login-box" role="main" aria-label="Formulario de inicio de sesión">
+  <h1>Escuela de Fútbol Pinze</h1>
+
+  <!-- FORMULARIO ADAPTADO PARA SPRING BOOT -->
+  <form th:action="@{/login}" method="post" th:object="${usuario}" class="form-solo">
+
+    <div class="Formgrupo">
+
+      <label for="correo">Correo</label>
+      <input id="correo" type="email" placeholder="Ingrese su correo" th:field="*{correo}" required>
+
+      <label for="contrasena">Contraseña</label>
+      <input id="contrasena" type="password" placeholder="Ingrese su contraseña" th:field="*{contrasena}" required>
+
+    </div>
+
+    <button type="submit">Iniciar sesión</button>
+
+    <!-- MENSAJE DE ERROR -->
+    <p th:if="${error}" th:text="${error}" style="color:red; margin-top:10px;"></p>
+
+  </form>
+
+  <div class="extra-links">
+    <a href="#">¿Olvidaste tu contraseña?</a>
+    <a href="../registrarseindex.html">Registrarse</a>
+  </div>
+</div>
+
+</body>
+</html>

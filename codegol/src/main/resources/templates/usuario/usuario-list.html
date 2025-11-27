@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Usuarios - Codegol</title>
+
+  <link rel="stylesheet" href="/css/style_pag_prin.css">
+  <link rel="stylesheet" href="/css/stylepag.css">
+</head>
+<body>
+
+  <aside class="menu">
+    <a href="/index.html" class="logo" aria-label="Logo Codegol">
+      <img src="/imagenes/logo.jpg" alt="Logo" />
+    </a>
+    <h2>⚽ Menú ⚽</h2>
+    <ul>
+      <li><a href="/usuarios">Usuarios</a></li>
+      <li><a href="/roles">Roles - Usuarios</a></li>
+      <li><a href="/entrenamiento">Entrenamiento</a></li>
+      <li><a href="/inventario">Inventario</a></li>
+      <li><a href="/rendimiento">Rendimiento</a></li>
+      <li><a href="/matricula">Matrícula</a></li>
+      <li><a href="/pago">Pago</a></li>
+    </ul>
+    <a href="/logout" class="cerrar-sesion">Cerrar sesión</a>
+  </aside>
+
+  <div class="contenido">
+
+    <div class="barra-top">
+      <div class="barra-busqueda">
+        <input type="text" placeholder="Buscar usuario...">
+      </div>
+      <a href="/usuarios/nuevo" class="boton-registrar">Registrar nuevo usuario</a>
+      <a href="/usuarios/inactivos" class="boton-registrar">Ver inactivos</a>
+    </div>
+      
+    <div th:if="${error}" class="alert alert-danger" role="alert"> <span th:text="${error}"></span> </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Correo</th>
+          <th>Nombre completo</th>
+          <th>Identificación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="usuario : ${usuarios}">
+          <td th:text="${usuario.correo}"></td>
+          <td th:text="${usuario.nombre_completo}"></td>
+          <td th:text="${usuario.num_identificacion}"></td>
+
+          <td class="acciones">
+            <button class="ver-mas" th:attr="data-id=${usuario.id_usuario}">Ver más</button>
+
+            <button class="actualizar"
+                    th:onclick="'location.href=\'/usuarios/editar/' + ' ' + ${usuario.id_usuario} + '\''">
+              Actualizar
+            </button>
+
+            <a class="eliminar"
+               th:href="@{/usuarios/eliminar/{id}(id=${usuario.id_usuario})}">
+              Eliminar
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DETALLE EMERGENTE -->
+  <div th:each="usuario : ${usuarios}"
+       class="ventana-flotante"
+       th:id="'detalle-usuario-' + ${usuario.id_usuario}">
+
+    <ul>
+      <li><strong>ID Usuario:</strong> <span th:text="${usuario.id_usuario}"></span></li>
+      <li><strong>Correo:</strong> <span th:text="${usuario.correo}"></span></li>
+      <li><strong>Nombre completo:</strong> <span th:text="${usuario.nombre_completo}"></span></li>
+      <li><strong>Identificación:</strong> <span th:text="${usuario.num_identificacion}"></span></li>
+      <li><strong>Tipo Doc.:</strong> <span th:text="${usuario.tipo_documento}"></span></li>
+      <li><strong>Teléfono 1:</strong> <span th:text="${usuario.telefono_1}"></span></li>
+      <li><strong>Teléfono 2:</strong> <span th:text="${usuario.telefono_2}"></span></li>
+      <li><strong>Dirección:</strong> <span th:text="${usuario.direccion}"></span></li>
+      <li><strong>Género:</strong> <span th:text="${usuario.genero}"></span></li>
+      <li><strong>Fecha Nac.:</strong> <span th:text="${usuario.fecha_nacimiento}"></span></li>
+      <li><strong>Lugar Nac.:</strong> <span th:text="${usuario.lugar_nacimiento}"></span></li>
+      <li><strong>Grupo Sanguíneo:</strong> <span th:text="${usuario.grupo_sanguineo}"></span></li>
+
+      <li><strong>Estado:</strong>
+        <span th:text="${usuario.estado ? 'Activo' : 'Inactivo'}"></span>
+      </li>
+
+    </ul>
+  </div>
+
+  <script>
+    const btnVerMas = document.querySelectorAll('.ver-mas');
+    const ventanas = document.querySelectorAll('.ventana-flotante');
+
+    btnVerMas.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const ventana = document.getElementById('detalle-usuario-' + id);
+        ventana.classList.add('active');
+      });
+    });
+
+    window.addEventListener('click', function(e) {
+      ventanas.forEach(ventana => {
+        if (ventana.classList.contains('active') &&
+            !ventana.contains(e.target) &&
+            !e.target.classList.contains('ver-mas')) {
+          ventana.classList.remove('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

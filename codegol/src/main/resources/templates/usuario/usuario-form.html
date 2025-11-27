@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title th:text="${usuario.id_usuario != null and usuario.id_usuario > 0} ? 'Editar Usuario - Codegol' : 'Registrar Usuario - Codegol'"></title>
+
+  <link rel="stylesheet" href="/css/style_forms.css">
+</head>
+<body>
+
+  <header>
+    <a href="/usuarios" class="logo">
+      <img src="/imagenes/logo.jpg" alt="Logo Escuela de Fútbol Pinze" />
+    </a>
+
+    <a href="/usuarios" class="volver">Volver</a>
+  </header>
+
+  <div class="login-box">
+    
+    <h1 th:text="${usuario.id_usuario != null and usuario.id_usuario > 0} ? 'Editar Usuario' : 'Registrar Usuario'"></h1>
+
+    <form th:action="@{/usuarios}" th:object="${usuario}" method="post" enctype="multipart/form-data">
+
+      <input type="hidden" th:field="*{id_usuario}">
+
+      <div class="Formgrupo">
+        <label>Correo</label>
+        <input type="email" th:field="*{correo}" required>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Contraseña</label>
+        <input type="password" th:field="*{contrasena}" placeholder="Dejar vacío para no cambiar">
+      </div>
+
+      <div class="Formgrupo">
+        <label>Nombre completo</label>
+        <input type="text" th:field="*{nombre_completo}" required>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Número de identificación</label>
+        <input type="number" th:field="*{num_identificacion}" required>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Tipo de documento</label>
+        <select th:field="*{tipo_documento}" required>
+          <option value="">Seleccione</option>
+          <option value="cc">CC</option>
+          <option value="ti">TI</option>
+          <option value="ce">CE</option>
+          <option value="pa">PA</option>
+          <option value="rc">RC</option>
+          <option value="pep">PEP</option>
+          <option value="nit">NIT</option>
+          <option value="nuip">NUIP</option>
+          <option value="dni">DNI</option>
+          <option value="ppt">PPT</option>
+        </select>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Teléfono 1</label>
+        <input type="number" th:field="*{telefono_1}" required>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Teléfono 2</label>
+        <input type="number" th:field="*{telefono_2}">
+      </div>
+
+      <div class="Formgrupo">
+        <label>Dirección</label>
+        <input type="text" th:field="*{direccion}" required>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Género</label>
+        <select th:field="*{genero}" required>
+          <option value="">Seleccione</option>
+          <option value="m">Masculino</option>
+          <option value="f">Femenino</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Fecha de nacimiento</label>
+        <input type="date" th:field="*{fecha_nacimiento}" required>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Lugar de nacimiento</label>
+        <input type="text" th:field="*{lugar_nacimiento}" required>
+      </div>
+
+      <div class="Formgrupo">
+        <label>Grupo sanguíneo</label>
+        <select th:field="*{grupo_sanguineo}" required>
+            <option value="">Seleccione</option>
+            <option value="a+">A+</option>
+            <option value="a-">A-</option>
+            <option value="b+">B+</option>
+            <option value="b-">B-</option>
+            <option value="ab+">AB+</option>
+            <option value="ab-">AB-</option>
+            <option value="o+">O+</option>
+            <option value="o-">O-</option>
+        </select>
+      </div>
+
+      <!-- Foto Actual -->
+      <div th:if="${usuario.foto_perfil != null}">
+        <img th:src="@{'/images/' + ${usuario.foto_perfil}}" 
+             alt="Foto de perfil"
+             style="width: 150px; border-radius: 10px; margin-bottom: 10px;">
+      </div>
+
+      <div class="Formgrupo">
+        <label>Foto de perfil</label>
+        <input type="file" th:field="*{fotoArchivo}" accept="image/*">
+      </div>
+
+      <div class="Formgrupo">
+        <label>Roles</label>
+        <select multiple th:field="*{roles}">
+          <option th:each="r : ${roles}"
+                  th:value="${r.id_rol}"
+                  th:text="${r.rol_usuario}">
+          </option>
+        </select>
+      </div>
+
+      <button type="submit"
+        th:text="${usuario.id_usuario != null ? 'Guardar cambios' : 'Registrar'}">
+      </button>
+    </form>
+  </div>
+
+</body>
+</html>
