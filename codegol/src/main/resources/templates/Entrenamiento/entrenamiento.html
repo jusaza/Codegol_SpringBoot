@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
+
+<head>
+    <title th:text="${usuario.id_usuario != null and usuario.id_usuario > 0} ? 'Editar Usuario - Codegol' : 'Registrar Usuario - Codegol'"></title>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1>Entrenamiento</h1>
+  <form action="../entrenopag.html" method="GET">
+    <div>
+      <label for="descripcion">Descripción</label>
+      <input type="text" id="descripcion" name="descripcion" placeholder="Ingrese la Descripción" required>
+    </div>
+    <div class="Formgrupo">
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha" name="fecha" required>
+    </div>
+    <div class="Formgrupo">
+      <label for="hora_inicio">Hora inicio</label>
+      <input type="time" id="hora_inicio" name="hora_inicio" required>
+    </div>
+    <div class="Formgrupo">
+      <label for="hora_fin">Hora fin</label>
+      <input type="time" id="hora_fin" name="hora_fin" required>
+    </div>
+    <div class="Formgrupo">
+      <label for="lugar">Lugar</label>
+      <input type="text" id="lugar" name="lugar" placeholder="Ingrese el lugar" required>
+    </div>
+    <div>
+      <label for="registrado_por"></label>
+      <input type="hidden" name="registrado_por" id="registrado_por" placeholder="Ingresa la persona que hizo el registro" readonly>
+    </div>  
+    <div class="Formgrupo">
+      <label for="id"></label>
+      <input type="hidden" id="id" name="id" placeholder="El sistema genera el id" readonly>
+    </div>  
+ 
+            <button type="submit">Guardar entrenamiento</button>
+  </form>
+</div>
+
+</body>
+</html>

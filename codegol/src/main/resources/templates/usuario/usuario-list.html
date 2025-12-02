@@ -1,33 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Usuarios - Codegol</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
 
-  <link rel="stylesheet" href="/css/style_pag_prin.css">
-  <link rel="stylesheet" href="/css/stylepag.css">
+<head>
+    <title>Usuario - Codegol</title>
 </head>
 <body>
 
-  <aside class="menu">
-    <a href="/index.html" class="logo" aria-label="Logo Codegol">
-      <img src="/imagenes/logo.jpg" alt="Logo" />
-    </a>
-    <h2>⚽ Menú ⚽</h2>
-    <ul>
-      <li><a href="/usuarios">Usuarios</a></li>
-      <li><a href="/roles">Roles - Usuarios</a></li>
-      <li><a href="/entrenamiento">Entrenamiento</a></li>
-      <li><a href="/inventario">Inventario</a></li>
-      <li><a href="/rendimiento">Rendimiento</a></li>
-      <li><a href="/matricula">Matrícula</a></li>
-      <li><a href="/pago">Pago</a></li>
-    </ul>
-    <a href="/logout" class="cerrar-sesion">Cerrar sesión</a>
-  </aside>
-
-  <div class="contenido">
+  <div layout:fragment="content">
 
     <div class="barra-top">
       <div class="barra-busqueda">
@@ -99,28 +80,8 @@
     </ul>
   </div>
 
-  <script>
-    const btnVerMas = document.querySelectorAll('.ver-mas');
-    const ventanas = document.querySelectorAll('.ventana-flotante');
 
-    btnVerMas.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        const ventana = document.getElementById('detalle-usuario-' + id);
-        ventana.classList.add('active');
-      });
-    });
-
-    window.addEventListener('click', function(e) {
-      ventanas.forEach(ventana => {
-        if (ventana.classList.contains('active') &&
-            !ventana.contains(e.target) &&
-            !e.target.classList.contains('ver-mas')) {
-          ventana.classList.remove('active');
-        }
-      });
-    });
-  </script>
+  <script src ="/js/usuario.js"></script>
 
 </body>
 </html>

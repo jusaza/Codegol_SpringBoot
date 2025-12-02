@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
+
+<head>
+    <title th:text="${entrenamiento.id_entrenamiento != null && entrenamiento.id_entrenamiento > 0}
+            ? 'Editar Entrenamiento - Codegol'
+            : 'Registrar Entrenamiento - Codegol'">
+    </title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="${entrenamiento.id_entrenamiento != null && entrenamiento.id_entrenamiento > 0}
+            ? 'Editar Entrenamiento'
+            : 'Registrar Entrenamiento'"></h1>
+
+    <!-- FORMULARIO -->
+    <form th:action="@{/entrenamientos}" th:object="${entrenamiento}" method="post">
+
+        <!-- ID OCULTO -->
+        <input type="hidden" th:field="*{id_entrenamiento}">
+
+        <!-- DESCRIPCION -->
+        <div class="Formgrupo">
+            <label>Descripción</label>
+            <input type="text" th:field="*{descripcion}" placeholder="Ingrese la descripción" maxlength="100">
+        </div>
+
+        <!-- FECHA -->
+        <div class="Formgrupo">
+            <label>Fecha</label>
+            <input type="date" th:field="*{fecha}" required>
+        </div>
+
+        <!-- HORA INICIO -->
+        <div class="Formgrupo">
+            <label>Hora de inicio</label>
+            <input type="time" th:field="*{hora_inicio}" required>
+        </div>
+
+        <!-- HORA FIN -->
+        <div class="Formgrupo">
+            <label>Hora de finalización</label>
+            <input type="time" th:field="*{hora_fin}" required>
+        </div>
+
+        <!-- LUGAR -->
+        <div class="Formgrupo">
+            <label>Lugar</label>
+            <input type="text" th:field="*{lugar}" placeholder="Ingrese el lugar" required maxlength="50">
+        </div>
+
+        <!-- OBSERVACIONES -->
+        <div class="Formgrupo">
+            <label>Observaciones</label>
+            <input type="text" th:field="*{observaciones}" maxlength="100">
+        </div>
+
+        <!-- USUARIO CREADOR -->
+        <div class="Formgrupo">
+            <label>Registrado por</label>
+            <select th:field="*{usuario}" required>
+                <option value="">Seleccione un usuario</option>
+
+                <option th:each="u : ${usuarios}"
+                        th:value="${u.id_usuario}"
+                        th:text="${u.nombre_completo}">
+                </option>
+            </select>
+        </div>
+
+        <!-- BOTÓN -->
+        <button type="submit"
+                th:text="${entrenamiento.id_entrenamiento != null ? 'Guardar cambios' : 'Registrar'}">
+        </button>
+
+    </form>
+</div>
+</body>
+</html>

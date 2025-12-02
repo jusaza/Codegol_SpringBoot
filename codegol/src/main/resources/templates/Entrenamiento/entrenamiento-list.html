@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
+
+<head>
+    <title>Entrenamientos - Codegol</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <br>
+
+    <!-- BARRA SUPERIOR -->
+    <div class="barra-top">
+        <div class="barra-busqueda">
+            <input type="text" placeholder="Buscar entrenamiento...">
+        </div>
+
+        <a href="/entrenamientos/nuevo" class="boton-registrar">
+            Registrar entrenamiento
+        </a>
+    </div>
+
+    <!-- TABLA -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Lugar</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Tipo</th>
+            <th>Registrado por</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="e : ${entrenamientos}">
+            <td th:text="${e.id_entrenamiento}"></td>
+            <td th:text="${e.fecha}"></td>
+            <td th:text="${e.lugar}"></td>
+            <td th:text="${e.hora_inicio}"></td>
+            <td th:text="${e.hora_fin}"></td>
+            <td th:text="${e.tipo}"></td>
+            <td th:text="${e.registrado_por}"></td>
+
+            <td class="acciones">
+                <button class="actualizar"
+                        th:onclick="'location.href=\'/entrenamientos/editar/' + ${e.id_entrenamiento} + '\''">
+                    Actualizar
+                </button>
+
+                <a class="eliminar"
+                   th:href="@{/entrenamientos/eliminar/{id}(id=${e.id_entrenamiento})}">
+                    Eliminar
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
+
+

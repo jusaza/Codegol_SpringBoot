@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title layout:title-pattern="$CONTENT_TITLE">Codegol</title>
+
+    <link rel="stylesheet" href="/css/style_pag_prin.css">
+    <link rel="stylesheet" href="/css/stylepag.css">
+</head>
+
+<body>
+
+<aside class="menu">
+    <a href="/index.html" class="logo" aria-label="Logo Codegol">
+        <img src="/imagenes/logo.jpg" alt="Logo" />
+    </a>
+    <h2>⚽ Menú ⚽</h2>
+    <ul>
+        <li><a href="/usuarios">Usuarios</a></li>
+        <li><a href="/roles">Roles - Usuarios</a></li>
+        <li><a href="/entrenamientos">Entrenamiento</a></li>
+        <li><a href="/inventario">Inventario</a></li>
+        <li><a href="/rendimiento">Rendimiento</a></li>
+        <li><a href="/matricula">Matrícula</a></li>
+        <li><a href="/pago">Pago</a></li>
+    </ul>
+    <a href="/logout" class="cerrar-sesion">Cerrar sesión</a>
+</aside>
+    <div class="contenido" layout:fragment="content">
+
+    </div>
+</body>
+</html>
