@@ -65,16 +65,6 @@ public class EntrenamientoController {
         return "redirect:/entrenamientos";
     }
 
-    // -------------------------------------------------------------
-    // VER DETALLE DE UN ENTRENAMIENTO
-    // -------------------------------------------------------------
-    @GetMapping("/ver/{id}")
-    public String verEntrenamiento(@PathVariable("id") int id, Model model) {
-        Entrenamiento entrenamiento = entrenamientoService.obtenerPorId(id);
-
-        model.addAttribute("entrenamiento", entrenamiento);
-        return "entrenamiento/entrenamiento-view";
-    }
 
     // -------------------------------------------------------------
     // EDITAR ENTRENAMIENTO

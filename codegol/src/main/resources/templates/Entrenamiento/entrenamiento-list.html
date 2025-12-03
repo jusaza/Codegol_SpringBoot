@@ -27,12 +27,12 @@
         <thead>
         <tr>
             <th>ID</th>
+            <th>Descripción</th>
             <th>Fecha</th>
             <th>Lugar</th>
             <th>Hora Inicio</th>
             <th>Hora Fin</th>
-            <th>Tipo</th>
-            <th>Registrado por</th>
+            <th>Observacion</th>
             <th>Acciones</th>
         </tr>
         </thead>
@@ -40,12 +40,12 @@
         <tbody>
         <tr th:each="e : ${entrenamientos}">
             <td th:text="${e.id_entrenamiento}"></td>
+            <td th:text="${e.descripcion}"></td>
             <td th:text="${e.fecha}"></td>
             <td th:text="${e.lugar}"></td>
             <td th:text="${e.hora_inicio}"></td>
             <td th:text="${e.hora_fin}"></td>
-            <td th:text="${e.tipo}"></td>
-            <td th:text="${e.registrado_por}"></td>
+            <td th:text="${e.observaciones}"></td>
 
             <td class="acciones">
                 <button class="actualizar"
