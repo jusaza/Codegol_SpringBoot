@@ -52,11 +52,14 @@
                         th:onclick="'location.href=\'/entrenamientos/editar/' + ${e.id_entrenamiento} + '\''">
                     Actualizar
                 </button>
+                <button class="eliminar">
+                    <a style="color: inherit; text-decoration: none;"
+                       th:href="@{/entrenamientos/eliminar/{id}(id=${e.id_entrenamiento})}">
+                        Eliminar
+                    </a>
+                </button>
 
-                <a class="eliminar"
-                   th:href="@{/entrenamientos/eliminar/{id}(id=${e.id_entrenamiento})}">
-                    Eliminar
-                </a>
+
             </td>
         </tr>
         </tbody>

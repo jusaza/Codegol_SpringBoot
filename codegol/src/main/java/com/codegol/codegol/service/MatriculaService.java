@@ -23,6 +23,6 @@ public class MatriculaService {
     return matriculaRespository.findById(id).orElse(null);
   }
 
-  public Matricula obtenerCategoria(int categoria) { return matriculaRespository.findByCategoria(categoria);}
+  //public Matricula obtenerCategoria(int categoria) { return matriculaRespository.findByCategoria(categoria);}
 
 }

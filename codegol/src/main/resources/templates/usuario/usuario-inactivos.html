@@ -36,15 +36,12 @@
           <td th:text="${usuario.num_identificacion}"></td>
 
           <td class="acciones">
-            <a class="actualizar"
-               th:href="@{/usuarios/editar/{id}(id=${usuario.id_usuario})}">
-              Actualizar
-            </a>
-
-            <a class="eliminar"
+              <button class="eliminar" style="background-color: green;">
+            <a style="color: inherit; text-decoration: none;"
                th:href="@{/usuarios/eliminar/{id}(id=${usuario.id_usuario})}">
-              Eliminar
+              Activar
             </a>
+              </button>
           </td>
         </tr>
       </tbody>
