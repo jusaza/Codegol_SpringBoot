@@ -13,9 +13,15 @@
 
     <!-- BARRA SUPERIOR -->
     <div class="barra-top">
-        <div class="barra-busqueda">
-            <input type="text" placeholder="Buscar entrenamiento...">
-        </div>
+        <form method="get" action="/entrenamientos">
+            <input type="text"
+                   name="q"
+                   placeholder="Buscar por fecha o descripción..."
+                   th:value="${q}"
+                   oninput="this.form.submit()"
+                   class="barra-busqueda">
+        </form>
+
 
         <a href="/entrenamientos/nuevo" class="boton-registrar">
             Registrar entrenamiento

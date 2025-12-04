@@ -18,6 +18,11 @@ public class EntrenamientoService {
         return entrenamientoRepository.findByEstado(true);
     }
 
+    public List<Entrenamiento> buscar(LocalDate fecha, String descripcion) {
+        return entrenamientoRepository.buscar(fecha, descripcion);
+    }
+
+
     // Guardar o actualizar
     public Entrenamiento guardar(Entrenamiento entrenamiento) {
         return entrenamientoRepository.save(entrenamiento);
@@ -28,10 +33,6 @@ public class EntrenamientoService {
         return entrenamientoRepository.findById(id).orElse(null);
     }
 
-    // Buscar por fecha
-    public List<Entrenamiento> buscarPorFecha(LocalDate fecha) {
-        return entrenamientoRepository.findByFecha(fecha);
-    }
 
     // Eliminación lógica
     public void eliminar(int id) {

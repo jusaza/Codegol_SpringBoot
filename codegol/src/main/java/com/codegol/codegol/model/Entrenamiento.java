@@ -2,6 +2,8 @@ package com.codegol.codegol.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,12 +19,15 @@ public class Entrenamiento {
     private String descripcion;
 
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha;
 
     @NotNull
+    @DateTimeFormat(pattern = "HH:mm")
     private LocalTime hora_inicio;
 
     @NotNull
+    @DateTimeFormat(pattern = "HH:mm")
     private LocalTime hora_fin;
 
     @NotBlank

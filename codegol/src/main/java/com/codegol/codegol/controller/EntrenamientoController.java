@@ -6,13 +6,14 @@ import com.codegol.codegol.service.EntrenamientoService;
 import com.codegol.codegol.service.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("/entrenamientos")
@@ -28,10 +29,28 @@ public class EntrenamientoController {
     // LISTAR ENTRENAMIENTOS (solo activos)
     // -------------------------------------------------------------
     @GetMapping
-    public String listarEntrenamientos(Model model) {
-        model.addAttribute("entrenamientos", entrenamientoService.listarActivos());
+    public String listarEntrenamientos(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha,
+            @RequestParam(required = false) String descripcion,
+            Model model
+    ) {
+
+        List<Entrenamiento> lista;
+
+        if (fecha != null || (descripcion != null && !descripcion.isEmpty())) {
+            lista = entrenamientoService.buscar(fecha, descripcion);
+        } else {
+            lista = entrenamientoService.listarActivos();
+        }
+
+        model.addAttribute("entrenamientos", lista);
+        model.addAttribute("fecha", fecha);
+        model.addAttribute("descripcion", descripcion);
+
         return "entrenamiento/entrenamiento-list";
     }
+
+
 
     // -------------------------------------------------------------
     // NUEVO ENTRENAMIENTO
