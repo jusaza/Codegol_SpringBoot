@@ -35,6 +35,13 @@
         </a>
     </div>
 
+    <!-- BOTÓN PARA DESCARGAR PDF -->
+    <div style="margin: 10px 0;">
+        <form th:action="@{/reporte/pdf}" method="get">
+            <button type="submit" class="boton-pdf">Descargar PDF</button>
+        </form>
+    </div>
+
     <!-- TABLA -->
     <table>
         <thead>

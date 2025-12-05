@@ -2,8 +2,10 @@ package com.codegol.codegol.controller;
 
 import com.codegol.codegol.model.Matricula;
 import com.codegol.codegol.service.MatriculaService;
+import com.codegol.codegol.service.ReporteService;
 import com.codegol.codegol.service.UsuarioService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -73,7 +75,7 @@ public class MatriculaController {
 
         matriculaService.guardar(matricula);
 
-        return "redirect:/matriculas";
+        return "redirect:/matricula-list";
     }
 
     // EDITAR MATRICULA
@@ -88,13 +90,13 @@ public class MatriculaController {
 
         if (matricula == null) {
             redirectAttributes.addFlashAttribute("error", "No existe la matrícula.");
-            return "redirect:/matriculas";
+            return "redirect:/matricula-list";
         }
 
         if (!matricula.isEstado()) {
             redirectAttributes.addFlashAttribute("error",
                     "No se puede editar una matrícula inactiva.");
-            return "redirect:/matriculas";
+            return "redirect:/matricula-list";
         }
 
         model.addAttribute("matricula", matricula);
@@ -111,9 +113,8 @@ public class MatriculaController {
     @GetMapping("/eliminar/{id}")
     public String eliminarMatricula(@PathVariable("id") int id) {
         matriculaService.eliminar(id);
-        return "redirect:/matriculas";
+        return "redirect:/matricula-list";
     }
-
-
+    
 
 }

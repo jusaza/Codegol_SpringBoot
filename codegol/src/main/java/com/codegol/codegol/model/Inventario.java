@@ -2,6 +2,8 @@ package com.codegol.codegol.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 @Entity
@@ -70,7 +72,7 @@ public class Inventario {
     public LocalDate getFecha_ingreso() {
         return fecha_ingreso;
     }
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     public void setFecha_ingreso(LocalDate fecha_ingreso) {
         this.fecha_ingreso = fecha_ingreso;
     }

@@ -18,9 +18,11 @@ public class EntrenamientoService {
         return entrenamientoRepository.findByEstado(true);
     }
 
-    public List<Entrenamiento> buscar(LocalDate fecha, String descripcion) {
-        return entrenamientoRepository.buscar(fecha, descripcion);
+    public List<Entrenamiento> buscarFlexible(String q) {
+        return entrenamientoRepository.buscarFlexible(q);
     }
+
+
 
 
     // Guardar o actualizar

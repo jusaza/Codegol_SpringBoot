@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
+
+<head>
+    <title>Inventario - Codegol</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <br>
+
+    <!-- BARRA SUPERIOR -->
+    <div class="barra-top">
+
+        <!-- BUSQUEDA -->
+        <div class="barra-busqueda">
+            <form method="get" action="/inventario">
+                <input type="text"
+                       name="q"
+                       placeholder="Buscar artículo..."
+                       th:value="${q}">
+            </form>
+        </div>
+
+        <!-- BOTON NUEVO -->
+        <a href="/inventario/nuevo" class="boton-registrar">
+            Agregar artículo
+        </a>
+    </div>
+
+
+    <!-- TABLA INVENTARIO -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID Inventario</th>
+            <th>Nombre del artículo</th>
+            <th>Cantidad total</th>
+            <th>Descripción</th>
+            <th>Fecha ingreso</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="i : ${inventarios}">
+            <td th:text="${i.id_inventario}"></td>
+            <td th:text="${i.nombre_articulo}"></td>
+            <td th:text="${i.cantidad_total}"></td>
+            <td th:text="${i.descripcion}"></td>
+            <td th:text="${i.fecha_ingreso}"></td>
+
+            <!-- ACCIONES -->
+            <td class="acciones">
+                <!-- Actualizar -->
+                <button class="actualizar"
+                        th:onclick="'location.href=\'/inventario/editar/' + ${i.id_inventario} + '\''">
+                    Actualizar
+                </button>
+
+                <!-- Eliminar -->
+                <button class="eliminar">
+                    <a style="color: inherit; text-decoration: none;"
+                       th:href="@{/inventario/eliminar/{id}(id=${i.id_inventario})}">
+                        Eliminar
+                    </a>
+                </button>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
