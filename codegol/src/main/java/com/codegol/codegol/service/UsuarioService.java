@@ -32,6 +32,8 @@ public class UsuarioService {
     return usuarioRepository.findByEstado(false);
     }
 
+
+
     public List<Rol> listarRoles(){
         return rolRepository.findAll();
     }

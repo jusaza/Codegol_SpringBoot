@@ -30,25 +30,25 @@ public class EntrenamientoController {
     // -------------------------------------------------------------
     @GetMapping
     public String listarEntrenamientos(
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fecha,
-            @RequestParam(required = false) String descripcion,
+            @RequestParam(required = false) String q,
             Model model
     ) {
 
         List<Entrenamiento> lista;
 
-        if (fecha != null || (descripcion != null && !descripcion.isEmpty())) {
-            lista = entrenamientoService.buscar(fecha, descripcion);
+        if (q != null && !q.trim().isEmpty()) {
+            lista = entrenamientoService.buscarFlexible(q.trim());
         } else {
             lista = entrenamientoService.listarActivos();
         }
 
         model.addAttribute("entrenamientos", lista);
-        model.addAttribute("fecha", fecha);
-        model.addAttribute("descripcion", descripcion);
+        model.addAttribute("q", q);
 
         return "entrenamiento/entrenamiento-list";
     }
+
+
 
 
 

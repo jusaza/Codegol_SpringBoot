@@ -12,13 +12,16 @@ public interface EntrenamientoRespository extends JpaRepository<Entrenamiento, I
     List<Entrenamiento> findByEstado(boolean estado);
 
     @Query("""
-    SELECT e FROM Entrenamiento e 
+    SELECT e FROM Entrenamiento e
     WHERE e.estado = true
-      AND (:fecha IS NULL OR e.fecha = :fecha)
-      AND (:descripcion IS NULL OR LOWER(e.descripcion) LIKE LOWER(CONCAT('%', :descripcion, '%')))""")
-    List<Entrenamiento> buscar(
-            @Param("fecha") LocalDate fecha,
-            @Param("descripcion") String descripcion
-    );
+      AND (
+            LOWER(e.descripcion) LIKE LOWER(CONCAT('%', :q, '%'))
+         OR STR(e.fecha) LIKE CONCAT('%', :q, '%')
+      )""")
+    List<Entrenamiento> buscarFlexible(String q);
+
+
+
+
 
 }

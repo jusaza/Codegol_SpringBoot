@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/form.html">
+
+<head>
+    <title th:text="${inventario.id_inventario != null && inventario.id_inventario > 0}
+            ? 'Editar Inventario - Codegol'
+            : 'Registrar Inventario - Codegol'">
+    </title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="${inventario.id_inventario != null && inventario.id_inventario > 0}
+            ? 'Editar Inventario'
+            : 'Registrar Inventario'"></h1>
+
+    <!-- FORMULARIO -->
+    <form th:action="@{/inventario}" th:object="${inventario}" method="post">
+
+        <!-- ID OCULTO -->
+        <input type="hidden" th:field="*{id_inventario}">
+
+        <!-- NOMBRE ARTÍCULO -->
+        <div class="Formgrupo">
+            <label>Nombre del artículo</label>
+            <input type="text" th:field="*{nombre_articulo}" placeholder="Ingrese el nombre del artículo"
+                   maxlength="100" required>
+        </div>
+
+        <!-- CANTIDAD TOTAL -->
+        <div class="Formgrupo">
+            <label>Cantidad total</label>
+            <input type="number" th:field="*{cantidad_total}" placeholder="Ingrese la cantidad total"
+                   min="0" required>
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <div class="Formgrupo">
+            <label>Descripción</label>
+            <input type="text" th:field="*{descripcion}" placeholder="Ingrese una descripción"
+                   maxlength="100">
+        </div>
+
+        <!-- FECHA DE INGRESO -->
+        <div class="Formgrupo">
+            <label>Fecha de ingreso</label>
+            <input type="date" th:field="*{fecha_ingreso}" required>
+        </div>
+
+        <!-- USUARIO REGISTRADOR -->
+        <div class="Formgrupo">
+            <label>Registrado por</label>
+            <select th:field="*{usuario}" required>
+                <option value="">Seleccione un usuario</option>
+
+                <option th:each="u : ${usuarios}"
+                        th:value="${u.id_usuario}"
+                        th:text="${u.nombre_completo}"></option>
+            </select>
+        </div>
+
+        <!-- BOTÓN -->
+        <button type="submit"
+                th:text="${inventario.id_inventario != null ? 'Guardar cambios' : 'Registrar'}">
+        </button>
+
+    </form>
+</div>
+</body>
+</html>
