@@ -27,6 +27,9 @@ public class MatriculaService {
         return List.of();
     }
 
+    public void eliminar(int id) {
+    }
+
     //public Matricula obtenerCategoria(int categoria) { return matriculaRespository.findByCategoria(categoria);}
 
 }

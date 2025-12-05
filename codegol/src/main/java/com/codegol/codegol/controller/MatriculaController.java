@@ -73,7 +73,7 @@ public class MatriculaController {
 
         matriculaService.guardar(matricula);
 
-        return "redirect:/matriculas";
+        return "redirect:/matricula-list";
     }
 
     // EDITAR MATRICULA
@@ -88,13 +88,13 @@ public class MatriculaController {
 
         if (matricula == null) {
             redirectAttributes.addFlashAttribute("error", "No existe la matrícula.");
-            return "redirect:/matriculas";
+            return "redirect:/matricula-list";
         }
 
         if (!matricula.isEstado()) {
             redirectAttributes.addFlashAttribute("error",
                     "No se puede editar una matrícula inactiva.");
-            return "redirect:/matriculas";
+            return "redirect:/matricula-list";
         }
 
         model.addAttribute("matricula", matricula);
@@ -111,7 +111,7 @@ public class MatriculaController {
     @GetMapping("/eliminar/{id}")
     public String eliminarMatricula(@PathVariable("id") int id) {
         matriculaService.eliminar(id);
-        return "redirect:/matriculas";
+        return "redirect:/matricula-list";
     }
 
 
