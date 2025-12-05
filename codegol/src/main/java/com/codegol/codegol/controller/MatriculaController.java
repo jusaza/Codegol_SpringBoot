@@ -2,8 +2,10 @@ package com.codegol.codegol.controller;
 
 import com.codegol.codegol.model.Matricula;
 import com.codegol.codegol.service.MatriculaService;
+import com.codegol.codegol.service.ReporteService;
 import com.codegol.codegol.service.UsuarioService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -113,7 +115,6 @@ public class MatriculaController {
         matriculaService.eliminar(id);
         return "redirect:/matricula-list";
     }
-
-
+    
 
 }
