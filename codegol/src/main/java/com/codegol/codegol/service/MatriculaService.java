@@ -14,25 +14,9 @@ public class MatriculaService {
     @Autowired
     private MatriculaRespository matriculaRepository;
 
-<<<<<<< HEAD
     // Listar solo matrículas activas
-    public List<Matricula> listarActivos(){
+    public List<Matricula> listarActivos() {
         return matriculaRepository.findByEstado(true);
-=======
-  public List<Matricula> listarActivos() {return matriculaRespository.findByEstado(true);}
-
-  public Matricula guardar(Matricula matricula) { return matriculaRespository.save(matricula);}
-
-  public Matricula obtenerPorId(int id) {
-    return matriculaRespository.findById(id).orElse(null);
-  }
-
-    public List<Matricula> buscar(LocalDate fecha, String descripcion) {
-        return List.of();
-    }
-
-    public void eliminar(int id) {
->>>>>>> 1d0b23c4233599790e2a07e6cd8b9bbdcfeb0c78
     }
 
     // Buscar matrículas por fecha y observaciones
@@ -58,4 +42,5 @@ public class MatriculaService {
             matriculaRepository.save(matricula);
         }
     }
+
 }
