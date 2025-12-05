@@ -24,6 +24,7 @@ public class MatriculaService {
   }
 
     public List<Matricula> buscar(LocalDate fecha, String descripcion) {
+        return List.of();
     }
 
     //public Matricula obtenerCategoria(int categoria) { return matriculaRespository.findByCategoria(categoria);}
