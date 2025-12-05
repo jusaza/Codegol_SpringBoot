@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
+
+<head>
+    <title>Matrículas - Codegol</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <br>
+
+    <!-- BARRA SUPERIOR -->
+    <div class="barra-top">
+        <form method="get" action="/matriculas">
+            <!-- Búsqueda por texto (observaciones) -->
+            <input type="text"
+                   name="q"
+                   placeholder="Buscar por observaciones..."
+                   th:value="${q}"
+                   class="barra-busqueda">
+
+            <!-- Búsqueda por fecha de matrícula -->
+            <input type="date"
+                   name="fecha"
+                   th:value="${fecha}"
+                   class="barra-busqueda">
+
+            <button type="submit">Buscar</button>
+        </form>
+
+        <a href="/matriculas/nuevo" class="boton-registrar">
+            Registrar matrícula
+        </a>
+    </div>
+
+    <!-- BOTÓN PARA DESCARGAR PDF -->
+    <div style="margin: 10px 0;">
+        <form th:action="@{/reporte/pdf}" method="get">
+            <button type="submit" class="boton-pdf">Descargar PDF</button>
+        </form>
+    </div>
+
+    <!-- TABLA -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID Matrícula</th>
+            <th>Fecha Matrícula</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Estado</th>
+            <th>Observaciones</th>
+            <th>Categoría</th>
+            <th>Nivel</th>
+            <th>ID Jugador</th>
+            <th>Registrado por</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="m : ${matriculas}">
+            <td th:text="${m.id_matricula}"></td>
+            <td th:text="${m.fecha_matricula}"></td>
+            <td th:text="${m.fecha_inicio}"></td>
+            <td th:text="${m.fecha_fin}"></td>
+            <td th:text="${m.estado} ? 'Activo' : 'Inactivo'"></td>
+            <td th:text="${m.observaciones}"></td>
+            <td th:text="${m.categoria}"></td>
+            <td th:text="${m.nivel}"></td>
+            <td th:text="${m.id_jugador.nombre_completo}"></td>
+            <td th:text="${m.id_usuario.nombre_completo}"></td>
+
+            <td class="acciones">
+                <button class="actualizar"
+                        th:onclick="'location.href=\'/matriculas/editar/' + ${m.id_matricula} + '\''">
+                    Actualizar
+                </button>
+
+                <button class="eliminar">
+                    <a style="color: inherit; text-decoration: none;"
+                       th:href="@{/matriculas/eliminar/{id}(id=${m.id_matricula})}">
+                        Eliminar
+                    </a>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

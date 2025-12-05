@@ -23,6 +23,13 @@ public class MatriculaService {
     return matriculaRespository.findById(id).orElse(null);
   }
 
-  //public Matricula obtenerCategoria(int categoria) { return matriculaRespository.findByCategoria(categoria);}
+    public List<Matricula> buscar(LocalDate fecha, String descripcion) {
+        return List.of();
+    }
+
+    public void eliminar(int id) {
+    }
+
+    //public Matricula obtenerCategoria(int categoria) { return matriculaRespository.findByCategoria(categoria);}
 
 }

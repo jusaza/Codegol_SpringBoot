@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/form.html">
+
+<head>
+    <title th:text="${matricula.id_matricula != null && matricula.id_matricula > 0}
+            ? 'Editar Matrícula - Codegol'
+            : 'Registrar Matrícula - Codegol'">
+    </title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <h1 th:text="${matricula.id_matricula != null && matricula.id_matricula > 0}
+            ? 'Editar Matrícula'
+            : 'Registrar Matrícula'"></h1>
+
+    <!-- FORMULARIO -->
+    <form th:action="@{/matriculas}" th:object="${matricula}" method="post">
+
+        <!-- ID OCULTO -->
+        <input type="hidden" th:field="*{id_matricula}">
+
+        <!-- FECHA MATRÍCULA -->
+        <div class="Formgrupo">
+            <label>Fecha Matrícula</label>
+            <input type="date" th:field="*{fecha_matricula}" required>
+        </div>
+
+        <!-- FECHA INICIO -->
+        <div class="Formgrupo">
+            <label>Fecha Inicio</label>
+            <input type="date" th:field="*{fecha_inicio}" required>
+        </div>
+
+        <!-- FECHA FIN -->
+        <div class="Formgrupo">
+            <label>Fecha Fin</label>
+            <input type="date" th:field="*{fecha_fin}" required>
+        </div>
+
+        <!-- ESTADO -->
+        <div class="Formgrupo">
+            <label>Estado</label>
+            <select th:field="*{estado}" required>
+                <option th:value="true" th:text="'Activo'"></option>
+                <option th:value="false" th:text="'Inactivo'"></option>
+            </select>
+        </div>
+
+        <!-- OBSERVACIONES -->
+        <div class="Formgrupo">
+            <label>Observaciones</label>
+            <input type="text" th:field="*{observaciones}" maxlength="100">
+        </div>
+
+        <div class="Formgrupo">
+            <label>Categoría</label>
+            <select th:field="*{categoria}" required>
+                <option value="">Seleccione una categoría</option>
+                <option th:each="c : ${categorias}" th:value="${c}" th:text="${c}"></option>
+            </select>
+        </div>
+
+        <!-- NIVEL -->
+        <div class="Formgrupo">
+            <label>Nivel</label>
+            <select th:field="*{nivel}" required>
+                <option value="">Seleccione un nivel</option>
+                <option th:each="n : ${niveles}" th:value="${n}" th:text="${n}"></option>
+            </select>
+        </div>
+
+
+
+        <!-- JUGADOR (FK) -->
+        <div class="Formgrupo">
+            <label>Jugador</label>
+            <select th:field="*{id_jugador}" required>
+                <option value="">Seleccione un jugador</option>
+                <option th:each="j : ${jugadores}"
+                        th:value="${j.id_usuario}"
+                        th:text="${j.nombre_completo}">
+                </option>
+            </select>
+        </div>
+
+        <!-- REGISTRADO POR (FK) -->
+        <div class="Formgrupo">
+            <label>Registrado por</label>
+            <select th:field="*{id_usuario}" required>
+                <option value="">Seleccione un usuario</option>
+                <option th:each="u : ${usuarios}"
+                        th:value="${u.id_usuario}"
+                        th:text="${u.nombre_completo}">
+                </option>
+            </select>
+        </div>
+
+        <!-- BOTÓN -->
+        <button type="submit"
+                th:text="${matricula.id_matricula != null ? 'Guardar cambios' : 'Registrar'}">
+        </button>
+
+    </form>
+</div>
+</body>
+</html>
