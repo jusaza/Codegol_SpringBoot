@@ -124,7 +124,7 @@ input[type="email"] {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input[type="number"]:focus,
+input[type="email"]:focus,
 input[type="password"]:focus {
   border-color: #00bfff;
   box-shadow: 0 0 5px rgba(0,191,255,0.4);

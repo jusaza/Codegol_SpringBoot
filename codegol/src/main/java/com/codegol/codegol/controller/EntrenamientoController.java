@@ -3,6 +3,7 @@ package com.codegol.codegol.controller;
 import com.codegol.codegol.model.Entrenamiento;
 import com.codegol.codegol.model.Usuario;
 import com.codegol.codegol.service.EntrenamientoService;
+import com.codegol.codegol.service.MatriculaService;
 import com.codegol.codegol.service.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/entrenamientos")
 public class EntrenamientoController {
+    @Autowired
+    private MatriculaService matriculaService;
 
     @Autowired
     private EntrenamientoService entrenamientoService;
@@ -57,9 +60,11 @@ public class EntrenamientoController {
     // -------------------------------------------------------------
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("matriculas", matriculaService.listarActivos());
         model.addAttribute("entrenamiento", new Entrenamiento());
         model.addAttribute("usuarios", usuarioService.listarTodas());  // usuario creador del entrenamiento
         return "entrenamiento/entrenamiento-form";
+
     }
 
     // -------------------------------------------------------------
@@ -74,15 +79,33 @@ public class EntrenamientoController {
                     entrenamientoService.obtenerPorId(entrenamiento.getId_entrenamiento());
 
             if (existente != null) {
-                // si ya estaba desactivado, conservar
                 entrenamiento.setEstado(existente.isEstado());
             }
         }
 
+        // --------------------------------------------
+        // 1. Asignar relación padre-hijo para asistencia
+        // --------------------------------------------
+        if (entrenamiento.getDetallesAsiste() != null) {
+            entrenamiento.getDetallesAsiste()
+                    .forEach(det -> det.setEntrenamiento(entrenamiento));
+        }
+
+        // --------------------------------------------
+        // 2. (Opcional) asignar relación para artículos usados
+        // --------------------------------------------
+        if (entrenamiento.getDetallesUtiliza() != null) {
+            entrenamiento.getDetallesUtiliza()
+                    .forEach(det -> det.setEntrenamiento(entrenamiento));
+        }
+
+        // Guardar todo en cascada
         entrenamientoService.guardar(entrenamiento);
 
         return "redirect:/entrenamientos";
     }
+
+
 
 
     // -------------------------------------------------------------
@@ -90,6 +113,7 @@ public class EntrenamientoController {
     // -------------------------------------------------------------
     @GetMapping("/editar/{id}")
     public String editarEntrenamiento(
+
             @PathVariable("id") int id,
             Model model,
             RedirectAttributes redirectAttributes) {
@@ -109,6 +133,8 @@ public class EntrenamientoController {
 
         model.addAttribute("entrenamiento", entrenamiento);
         model.addAttribute("usuarios", usuarioService.listarTodas());
+        model.addAttribute("matriculas", matriculaService.listarActivos());
+
 
         return "entrenamiento/entrenamiento-form";
     }
@@ -121,5 +147,7 @@ public class EntrenamientoController {
         entrenamientoService.eliminar(id);
         return "redirect:/entrenamientos";
     }
+
+
 }
 
