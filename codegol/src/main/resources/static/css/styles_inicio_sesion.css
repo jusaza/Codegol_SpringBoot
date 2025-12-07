@@ -112,9 +112,9 @@ form.form-solo {
   padding-top: 10px;
 }
 
-input[type="number"],
+input[type="email"],
 input[type="password"]
-input[type="email"] {
+{
   width: 100%;
   padding: 10px 14px;
   font-size: 15px;
