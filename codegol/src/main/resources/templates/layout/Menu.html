@@ -17,14 +17,33 @@
         <img src="/imagenes/logo.jpg" alt="Logo" />
     </a>
     <h2>⚽ Menú ⚽</h2>
-    <ul>
-        <li><a href="/usuarios">Usuarios</a></li>
-        <li><a href="/entrenamientos">Entrenamiento</a></li>
-        <li><a href="/inventario">Inventario</a></li>
-        <li><a href="/rendimientos">Rendimiento</a></li>
-        <li><a href="/matriculas">Matrícula</a></li>
-        <li><a href="/pago">Pago</a></li>
-    </ul>
+<ul>
+
+    <li>
+        <a href="/usuarios">Usuarios</a>
+    </li>
+
+    <li th:if="${session.rol == 'Administrador' or session.rol == 'Entrenador' or session.rol == 'Jugador'}">
+        <a href="/entrenamientos">Entrenamiento</a>
+    </li>
+
+    <li th:if="${session.rol == 'Administrador' or session.rol == 'Entrenador'}">
+        <a href="/inventario">Inventario</a>
+    </li>
+
+    <li th:if="${session.rol == 'Administrador' or session.rol == 'Entrenador'}">
+        <a href="/rendimientos">Rendimiento</a>
+    </li>
+
+    <li th:if="${session.rol == 'Administrador' or session.rol == 'Responsable' or session.rol == 'Jugador'}">
+        <a href="/matriculas">Matrícula</a>
+    </li>
+
+    <li th:if="${session.rol == 'Administrador' or session.rol == 'Responsable'}">
+        <a href="/pago">Pago</a>
+    </li>
+</ul>
+
     <a href="/index.html" class="cerrar-sesion">Cerrar sesión</a>
 </aside>
     <div class="contenido" layout:fragment="content">
