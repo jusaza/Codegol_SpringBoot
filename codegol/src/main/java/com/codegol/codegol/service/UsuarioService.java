@@ -44,6 +44,14 @@ public class UsuarioService {
         return usuarioRepository.findById(id_usuario).orElse(null);
     }
     
+    public void activar(int id_usuario){
+    Usuario usuario = usuarioRepository.findById(id_usuario).orElse(null);
+    if(usuario != null){
+        usuario.setEstado(true); // activar
+        usuarioRepository.save(usuario); 
+      }
+    }
+    
     public void eliminar(int id_usuario){
     Usuario usuario = usuarioRepository.findById(id_usuario).orElse(null);
     if(usuario != null){

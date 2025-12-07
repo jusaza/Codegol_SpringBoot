@@ -119,4 +119,10 @@ public class UsuarioController {
         usuarioService.eliminar(id_usuario);
         return "redirect:/usuarios";
     }
+    
+    @GetMapping("/activar/{id_usuario}")
+    public String activarUsuario(@PathVariable int id_usuario){
+        usuarioService.activar(id_usuario);
+        return "redirect:/usuarios";
+    }
 }

@@ -4,7 +4,7 @@
       layout:decorate="layout/menu.html">
 
 <head>
-    <title>Usuario - Codegol</title>
+    <title>Usuarios - Codegol</title>
 </head>
 <body>
 
@@ -37,13 +37,21 @@
           <td th:text="${usuario.num_identificacion}"></td>
 
           <td class="acciones">
-            <button class="ver-mas" th:attr="data-id=${usuario.id_usuario}">Ver más</button>
+            <button class="ver-mas">
+            <a style="color: inherit; text-decoration: none;"
+               th:href="@{/usuarios/ver/{id}(id=${usuario.id_usuario})}">
+              Ver mas
+            </a>
+             </button>
 
-            <button class="actualizar"
-                    th:onclick="'location.href=\'/usuarios/editar/' + ' ' + ${usuario.id_usuario} + '\''">
-              Actualizar
-            </button>
-              <button class="eliminar">
+             <button class="actualizar">
+                <a style="color: inherit; text-decoration: none;"
+                   th:href="@{/usuarios/editar/{id}(id=${usuario.id_usuario})}">
+                  Actualizar
+                </a>
+             </button>
+              
+             <button class="eliminar">
             <a style="color: inherit; text-decoration: none;"
                th:href="@{/usuarios/eliminar/{id}(id=${usuario.id_usuario})}">
               Eliminar
