@@ -5,8 +5,6 @@ import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "inventario")
@@ -36,10 +34,6 @@ public class Inventario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
-    // ===== RELACIÓN CON DETALLES_UTILIZA =====
-    @OneToMany(mappedBy = "inventario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetallesUtiliza> detallesUtiliza = new ArrayList<>();
-
 
     // -------- GETTERS & SETTERS --------
 

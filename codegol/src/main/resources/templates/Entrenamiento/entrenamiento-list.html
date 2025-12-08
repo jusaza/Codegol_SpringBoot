@@ -55,6 +55,21 @@
             <td th:text="${e.observaciones}"></td>
 
             <td class="acciones">
+                <button class="actualizar" style="background-color: green;"
+                        th:onclick="'location.href=\'/asistencia/' + ${e.id_entrenamiento} + '\''">
+                    Asistencia
+                </button>
+                <!--
+                <button class="eliminar" style="background-color: yellow;">
+                    <a style="color: inherit; text-decoration: none;"
+                       th:href="">
+                        Utiliza
+                    </a>
+                </button>
+                -->
+            </td>
+
+            <td class="acciones">
                 <button class="actualizar"
                         th:onclick="'location.href=\'/entrenamientos/editar/' + ${e.id_entrenamiento} + '\''">
                     Actualizar
@@ -65,8 +80,6 @@
                         Eliminar
                     </a>
                 </button>
-
-
             </td>
         </tr>
         </tbody>

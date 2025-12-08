@@ -72,118 +72,12 @@
             </select>
         </div>
 
-        <h4>Asistencia de jugadores</h4>
-
-        <table class="table" id="detalles-asiste-table">
-            <thead>
-            <tr>
-                <th>Jugador</th>
-                <th>Tipo</th>
-                <th>Justificación</th>
-                <th>Observaciones</th>
-                <th></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:each="as, i : *{detallesAsiste}">
-                <td>
-                    <select th:field="*{detallesAsiste[__${i.index}__].matricula.id_matricula}" class="form-control">
-                        <option value="">Seleccione un jugador</option>
-                        <option th:each="m : ${matriculas}"
-                                th:value="${m.id_matricula}"
-                                th:text="${m.jugador.nombre_completo}"></option>
-                    </select>
-                </td>
-
-                <td>
-                    <select th:field="*{detallesAsiste[__${i.index}__].tipoAsistencia}" class="form-control">
-                        <option value="asiste">Asiste</option>
-                        <option value="inasiste">Inasiste</option>
-                        <option value="llegada_tarde">Llegada tarde</option>
-                    </select>
-                </td>
-
-                <td>
-                    <input type="text" th:field="*{detallesAsiste[__${i.index}__].justificacion}" class="form-control">
-                </td>
-
-                <td>
-                    <input type="text" th:field="*{detallesAsiste[__${i.index}__].observaciones}" class="form-control">
-                </td>
-
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm remove-as">X</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <button type="button" class="btn btn-secondary" id="add-asiste">Agregar asistencia</button>
-
-
         <!-- BOTÓN -->
         <button type="submit"
                 th:text="${entrenamiento.id_entrenamiento != null ? 'Guardar cambios' : 'Registrar'}">
         </button>
 
     </form>
-
-    <script th:inline="javascript">
-        console.log("MATRICULAS:", /*[[${matriculas}]]*/ []);
-    </script>
-
-
-    <script th:inline="javascript">
-        document.addEventListener("DOMContentLoaded", () => {
-
-            const asTable = document.querySelector("#detalles-asiste-table tbody");
-            const btnAddAs = document.getElementById("add-asiste");
-
-            let asIndex = asTable.children.length;
-
-            btnAddAs.addEventListener("click", () => {
-
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>
-                        <select name="detallesAsiste[${asIndex}].matricula.id_matricula" class="form-control">
-                            <option value="">Seleccione un jugador</option>
-                            ${window.matriculas.map(m => `
-                                <option value="${m.id_matricula}">${m.jugador.nombre_completo}</option>
-                            `).join("")}
-                        </select>
-                    </td>
-
-                    <td>
-                        <select name="detallesAsiste[${asIndex}].tipoAsistencia" class="form-control">
-                            <option value="asiste">Asiste</option>
-                            <option value="inasiste">Inasiste</option>
-                            <option value="llegada_tarde">Llegada tarde</option>
-                        </select>
-                    </td>
-
-                    <td><input type="text" name="detallesAsiste[${asIndex}].justificacion" class="form-control"></td>
-                    <td><input type="text" name="detallesAsiste[${asIndex}].observaciones" class="form-control"></td>
-
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm remove-as">X</button>
-                    </td>
-                `;
-
-                asTable.appendChild(row);
-                asIndex++;
-            });
-
-            asTable.addEventListener("click", e => {
-                if (e.target.classList.contains("remove-as")) {
-                    e.target.closest("tr").remove();
-                }
-            });
-
-        });
-    </script>
-
 </div>
 </body>
 </html>

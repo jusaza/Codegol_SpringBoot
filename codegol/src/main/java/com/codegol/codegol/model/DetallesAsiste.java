@@ -19,7 +19,7 @@ public class DetallesAsiste {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_asistencia", nullable = false)
+    @Column(name = "tipo_asistencia", nullable = true) // permitir null
     private TipoAsistencia tipoAsistencia;
 
     // ----------------------------------------------------

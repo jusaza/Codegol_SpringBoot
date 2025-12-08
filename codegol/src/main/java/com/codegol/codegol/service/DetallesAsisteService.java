@@ -22,4 +22,12 @@ public class DetallesAsisteService {
     public List<DetallesAsiste> listar() {
         return repository.findAll();
     }
+
+    public DetallesAsiste obtenerPorId(int id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void eliminar(int idAsiste) {
+        repository.deleteById(idAsiste);
+    }
 }

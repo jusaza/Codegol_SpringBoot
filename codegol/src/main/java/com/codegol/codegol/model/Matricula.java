@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name= "Matricula")
@@ -62,10 +60,6 @@ public class Matricula {
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario id_usuario;
-
-    // ===== RELACIÓN CON DETALLES_ASISTE =====
-    @OneToMany(mappedBy = "matricula", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetallesAsiste> detallesAsiste = new ArrayList<>();
 
     // GETTERS Y SETTERS
 

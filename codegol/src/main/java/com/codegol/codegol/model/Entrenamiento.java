@@ -6,8 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "entrenamiento")
@@ -45,15 +43,6 @@ public class Entrenamiento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
-
-    // ===== RELACIÓN CON DETALLES_UTILIZA =====
-    @OneToMany(mappedBy = "entrenamiento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetallesUtiliza> detallesUtiliza = new ArrayList<>();
-
-    // ===== RELACIÓN CON DETALLES_ASISTE =====
-    @OneToMany(mappedBy = "entrenamiento", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetallesAsiste> detallesAsiste = new ArrayList<>();
-
 
     // Getters y Setters -------------------
 
@@ -128,22 +117,5 @@ public class Entrenamiento {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    public List<DetallesAsiste> getDetallesAsiste() {
-        return detallesAsiste;
-    }
-
-    public void setDetallesAsiste(List<DetallesAsiste> detallesAsiste) {
-        this.detallesAsiste = detallesAsiste;
-    }
-
-    public List<DetallesUtiliza> getDetallesUtiliza() {
-        return detallesUtiliza;
-    }
-
-    public void setDetallesUtiliza(List<DetallesUtiliza> detallesUtiliza) {
-        this.detallesUtiliza = detallesUtiliza;
-    }
-
-
 }
 
