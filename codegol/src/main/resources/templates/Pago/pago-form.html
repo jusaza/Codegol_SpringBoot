@@ -22,10 +22,7 @@
 
     <form th:action="@{/pago/guardar}" th:object="${pago}" method="post">
 
-        <div class="Formgrupo">
-            <label>ID Pago</label>
-            <input type="number" th:field="*{idPago}" readonly>
-        </div>
+
 
         <div class="Formgrupo">
             <label>Concepto de Pago</label>
