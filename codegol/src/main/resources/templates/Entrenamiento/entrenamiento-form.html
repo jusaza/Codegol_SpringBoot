@@ -18,7 +18,7 @@
             : 'Registrar Entrenamiento'"></h1>
 
     <!-- FORMULARIO -->
-    <form th:action="@{/entrenamientos}" th:object="${entrenamiento}" method="post">
+    <form th:action="@{/entrenamientos}" th:object="${entrenamiento}" method="post" id="formEntrenamiento">
 
         <!-- ID OCULTO -->
         <input type="hidden" th:field="*{id_entrenamiento}">
@@ -26,7 +26,7 @@
         <!-- DESCRIPCION -->
         <div class="Formgrupo">
             <label>Descripción</label>
-            <input type="text" th:field="*{descripcion}" placeholder="Ingrese la descripción" maxlength="100">
+            <input type="text" th:field="*{descripcion}" placeholder="Ingrese la descripción" maxlength="100" required>
         </div>
 
         <!-- FECHA -->
@@ -38,13 +38,13 @@
         <!-- HORA INICIO -->
         <div class="Formgrupo">
             <label>Hora de inicio</label>
-            <input type="time" th:field="*{hora_inicio}" required>
+            <input type="time" th:field="*{hora_inicio}" id="hora_inicio" required>
         </div>
 
         <!-- HORA FIN -->
         <div class="Formgrupo">
             <label>Hora de finalización</label>
-            <input type="time" th:field="*{hora_fin}" required>
+            <input type="time" th:field="*{hora_fin}" id="hora_fin" required>
         </div>
 
         <!-- LUGAR -->
@@ -64,7 +64,6 @@
             <label>Registrado por</label>
             <select th:field="*{usuario}" required>
                 <option value="">Seleccione un usuario</option>
-
                 <option th:each="u : ${usuarios}"
                         th:value="${u.id_usuario}"
                         th:text="${u.nombre_completo}">
@@ -78,6 +77,24 @@
         </button>
 
     </form>
+
+    <!-- SCRIPT DE VALIDACIÓN -->
+    <script>
+        const form = document.getElementById('formEntrenamiento');
+
+        form.addEventListener('submit', function(event) {
+            const horaInicio = document.getElementById('hora_inicio').value;
+            const horaFin = document.getElementById('hora_fin').value;
+
+            if (horaInicio && horaFin && horaFin <= horaInicio) {
+                alert("La hora de finalización debe ser posterior a la hora de inicio.");
+                event.preventDefault(); // Evita enviar el formulario
+                document.getElementById('hora_fin').focus();
+            }
+        });
+    </script>
+
 </div>
 </body>
 </html>
+

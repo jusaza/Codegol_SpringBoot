@@ -59,7 +59,7 @@
     <hr>
 
     <!-- TABLA DE USOS -->
-    <form th:action="@{/utiliza/guardar}" method="post">
+    <form id="formGuardar" th:action="@{/utiliza/guardar}" method="post">
         <input type="hidden" name="id_entrenamiento" th:value="${entrenamiento.id_entrenamiento}" />
 
         <table width="100%">
@@ -114,9 +114,10 @@
                     <button type="button"
                             th:if="${!u.devuelto}"
                             class="actualizar"
-                            th:onclick="'location.href=\'/utiliza/devolver/' + ${u.id_utiliza} + '?id_entrenamiento=' + ${entrenamiento.id_entrenamiento} + '\''">
+                            th:onclick="|return validarDevolucion(${u.id_utiliza}, ${u.cantidad_usada});|">
                         Devolver
                     </button>
+
 
                     <button type="button"
                             th:if="${u.devuelto}"
@@ -137,31 +138,47 @@
     </form>
 
     <script>
-        // Buscador de artículos
-        const buscador = document.getElementById("buscadorArticulo");
-        const selectInventario = document.getElementById("selectInventario");
-        const cantidadAgregar = document.querySelector('input[name="cantidad_usada"]');
+        function validarDevolucion(idUtiliza, cantidadUsada) {
+            const devueltoInput = document.querySelector(`input[name='devuelto_${idUtiliza}']`);
+            const obsInput = document.querySelector(`input[name='obs_${idUtiliza}']`);
 
-        buscador.addEventListener("keyup", function() {
-            const filtro = this.value.toLowerCase();
-            for (let o of selectInventario.options) {
-                const txt = o.text.toLowerCase();
-                o.style.display = txt.includes(filtro) ? "" : "none";
-            }
-        });
+            const cantidadDevuelta = parseInt(devueltoInput.value);
 
-        // Validación de cantidad al agregar (cuando se confirma el valor)
-        cantidadAgregar.addEventListener("change", function() {
-            const selectedOption = selectInventario.selectedOptions[0];
-            if (!selectedOption) return;
-            const max = parseInt(selectedOption.dataset.max);
-            if (this.value > max) {
-                alert(`No puedes pedir más de ${max} unidades de este artículo.`);
-                this.value = max;
-            } else if (this.value < 1) {
-                this.value = 1;
+            if (isNaN(cantidadDevuelta)) {
+                alert("Por favor, coloque la cantidad a devolver.");
+                devueltoInput.focus();
+                return false;
             }
-        });
+
+            if (cantidadDevuelta < cantidadUsada && (!obsInput.value || obsInput.value.trim() === "")) {
+                alert("Debe indicar una observación si no devuelve la cantidad total usada.");
+                obsInput.focus();
+                return false;
+            }
+
+            // Primero hacemos submit del formulario de guardar
+            const formGuardar = document.getElementById("formGuardar");
+
+            // Creamos un "submit" programático y después de enviarse redirige
+            formGuardar.addEventListener("submit", function handler(e) {
+                e.preventDefault(); // evitamos submit normal
+                const xhr = new XMLHttpRequest();
+                xhr.open(formGuardar.method, formGuardar.action);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onload = function() {
+                    // Cuando termine el submit, redirige a devolver
+                    window.location.href = `/utiliza/devolver/${idUtiliza}?id_entrenamiento=${document.querySelector('input[name="id_entrenamiento"]').value}`;
+                };
+                xhr.send(new URLSearchParams(new FormData(formGuardar)).toString());
+                formGuardar.removeEventListener("submit", handler);
+            });
+
+            // Lanzamos el submit
+            formGuardar.requestSubmit();
+
+            return false;
+        }
+
 
         selectInventario.addEventListener("change", function() {
             const selectedOption = this.selectedOptions[0];
