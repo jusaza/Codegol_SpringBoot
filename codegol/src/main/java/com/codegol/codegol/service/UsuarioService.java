@@ -40,16 +40,16 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
     
-    public Rol guardarRol(Rol rol){
-        return rolRepository.save(rol);
-    }
-    
     public Usuario obtenerPorId(int id_usuario){
         return usuarioRepository.findById(id_usuario).orElse(null);
     }
     
-     public Rol obtenerIdRol(int id_rol){
-        return rolRepository.findById(id_rol).orElse(null);
+    public void activar(int id_usuario){
+    Usuario usuario = usuarioRepository.findById(id_usuario).orElse(null);
+    if(usuario != null){
+        usuario.setEstado(true); // activar
+        usuarioRepository.save(usuario); 
+      }
     }
     
     public void eliminar(int id_usuario){
@@ -57,14 +57,6 @@ public class UsuarioService {
     if(usuario != null){
         usuario.setEstado(false); // desactivar
         usuarioRepository.save(usuario); // guardar
-    }
-  }
-    
-    public void eliminarRol(int id_rol){
-    Rol rol = rolRepository.findById(id_rol).orElse(null);
-    if(rol != null){
-        rol.setEstado(false); 
-        rolRepository.save(rol);
     }
   }
 }

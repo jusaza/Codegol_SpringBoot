@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
+
+<head>
+    <title>Uso de Inventario</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <h1>Material utilizado en el entrenamiento</h1>
+
+    <!-- DATOS DEL ENTRENAMIENTO -->
+    <div>
+        <strong>ID:</strong> <span th:text="${entrenamiento.id_entrenamiento}"></span><br>
+        <strong>Descripción:</strong> <span th:text="${entrenamiento.descripcion}"></span><br>
+        <strong>Fecha:</strong> <span th:text="${entrenamiento.fecha}"></span><br>
+        <strong>Lugar:</strong> <span th:text="${entrenamiento.lugar}"></span><br>
+    </div>
+
+    <hr>
+
+    <!-- FORMULARIO AGREGAR USO DE ARTÍCULO -->
+    <form th:action="@{/utiliza/agregar}" method="post">
+        <input type="hidden" name="id_entrenamiento" th:value="${entrenamiento.id_entrenamiento}" />
+
+        <h3>Registrar uso de inventario:</h3>
+
+        <!-- BUSCADOR -->
+        <div class="barra-top">
+            <div class="barra-busqueda">
+                <input type="text" id="buscadorArticulo" placeholder="Buscar artículo...">
+            </div>
+            <a th:href="@{/entrenamientos}" class="boton-registrar">Volver</a>
+        </div>
+
+        <!-- SELECT -->
+        <div class="barra-top">
+            <select id="selectInventario" name="id_inventario" class="barra-busqueda" required>
+                <option value="">Seleccione un artículo</option>
+                <option th:each="i : ${inventarios}"
+                        th:value="${i.id_inventario}"
+                        th:text="${i.nombre_articulo + ' (Disponible: ' + i.cantidad_total + ')'}"
+                        th:attr="data-max=${i.cantidad_total}">
+                </option>
+            </select>
+        </div>
+
+        <div class="barra-top">
+            <div class="barra-busqueda">
+                <input type="number" id="cantidadAgregar" name="cantidad_usada" min="1" placeholder="Cantidad" required>
+                <button type="submit" class="boton-registrar" style="margin-top:5px">Agregar</button>
+            </div>
+        </div>
+    </form>
+
+    <hr>
+
+    <!-- TABLA DE USOS -->
+    <form id="formGuardar" th:action="@{/utiliza/guardar}" method="post">
+        <input type="hidden" name="id_entrenamiento" th:value="${entrenamiento.id_entrenamiento}" />
+
+        <table width="100%">
+            <thead>
+            <tr>
+                <th>Artículo</th>
+                <th>Inicial</th>
+                <th>Usado</th>
+                <th>Devuelto</th>
+                <th>Estado</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="u : ${usos}">
+                <td th:text="${u.inventario.nombre_articulo}"></td>
+                <td th:text="${u.cantidad_inicial}"></td>
+
+                <!-- Cantidad usada -->
+                <td>
+                    <input type="number"
+                           th:name="'usado_' + ${u.id_utiliza}"
+                           th:value="${u.cantidad_usada}"
+                           min="1"
+                           th:disabled="${u.devuelto}">
+                </td>
+
+                <!-- Cantidad devuelta -->
+                <td>
+                    <input type="number"
+                           th:name="'devuelto_' + ${u.id_utiliza}"
+                           th:value="${u.cantidad_devuelta}"
+                           min="0"
+                           th:disabled="${u.devuelto}"
+                           th:attr="data-max=${u.cantidad_usada}">
+                </td>
+
+                <td th:text="${u.devuelto ? 'Devuelto' : 'Pendiente'}"></td>
+
+                <!-- Observaciones -->
+                <td>
+                    <input type="text"
+                           th:name="'obs_' + ${u.id_utiliza}"
+                           th:value="${u.observaciones}"
+                           th:disabled="${u.devuelto}">
+                </td>
+
+                <!-- ACCIONES -->
+                <td class="acciones">
+                    <button type="button"
+                            th:if="${!u.devuelto}"
+                            class="actualizar"
+                            th:onclick="|return validarDevolucion(${u.id_utiliza}, ${u.cantidad_usada});|">
+                        Devolver
+                    </button>
+
+
+                    <button type="button"
+                            th:if="${u.devuelto}"
+                            class="eliminar"
+                            style="background-color: red;"
+                            th:onclick="'location.href=\'/utiliza/editar/' + ${u.id_utiliza} + '?id_entrenamiento=' + ${entrenamiento.id_entrenamiento} + '\''">
+                        Desbloquear
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br>
+        <div class="acciones">
+            <button type="submit" class="actualizar">Guardar</button>
+        </div>
+    </form>
+
+    <script>
+        function validarDevolucion(idUtiliza, cantidadUsada) {
+            const devueltoInput = document.querySelector(`input[name='devuelto_${idUtiliza}']`);
+            const obsInput = document.querySelector(`input[name='obs_${idUtiliza}']`);
+
+            const cantidadDevuelta = parseInt(devueltoInput.value);
+
+            if (isNaN(cantidadDevuelta)) {
+                alert("Por favor, coloque la cantidad a devolver.");
+                devueltoInput.focus();
+                return false;
+            }
+
+            if (cantidadDevuelta < cantidadUsada && (!obsInput.value || obsInput.value.trim() === "")) {
+                alert("Debe indicar una observación si no devuelve la cantidad total usada.");
+                obsInput.focus();
+                return false;
+            }
+
+            // Primero hacemos submit del formulario de guardar
+            const formGuardar = document.getElementById("formGuardar");
+
+            // Creamos un "submit" programático y después de enviarse redirige
+            formGuardar.addEventListener("submit", function handler(e) {
+                e.preventDefault(); // evitamos submit normal
+                const xhr = new XMLHttpRequest();
+                xhr.open(formGuardar.method, formGuardar.action);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onload = function() {
+                    // Cuando termine el submit, redirige a devolver
+                    window.location.href = `/utiliza/devolver/${idUtiliza}?id_entrenamiento=${document.querySelector('input[name="id_entrenamiento"]').value}`;
+                };
+                xhr.send(new URLSearchParams(new FormData(formGuardar)).toString());
+                formGuardar.removeEventListener("submit", handler);
+            });
+
+            // Lanzamos el submit
+            formGuardar.requestSubmit();
+
+            return false;
+        }
+
+
+        selectInventario.addEventListener("change", function() {
+            const selectedOption = this.selectedOptions[0];
+            if (!selectedOption) return;
+            const max = parseInt(selectedOption.dataset.max);
+            if (cantidadAgregar.value > max) {
+                alert(`La cantidad actual supera el disponible (${max}). Se ajustará automáticamente.`);
+                cantidadAgregar.value = max;
+            }
+        });
+
+        // Validación y sincronización Usado/Devuelto
+        document.querySelectorAll('table tbody tr').forEach(row => {
+            const usadoInput = row.querySelector('input[name^="usado_"]');
+            const devueltoInput = row.querySelector('input[name^="devuelto_"]');
+
+            if (!usadoInput || !devueltoInput) return;
+
+            // Limitar devuelto al máximo usado (cuando se confirma el valor)
+            devueltoInput.addEventListener("change", function() {
+                const max = parseInt(usadoInput.value);
+                if (this.value > max) {
+                    alert(`No puedes devolver más de ${max} unidades.`);
+                    this.value = max;
+                } else if (this.value < 0) {
+                    this.value = 0;
+                }
+            });
+
+            // Ajustar automáticamente devuelto si se reduce usado (cuando se confirma)
+            usadoInput.addEventListener("change", function() {
+                const usadoVal = parseInt(this.value);
+                const devueltoVal = parseInt(devueltoInput.value);
+                if (devueltoVal > usadoVal) {
+                    alert(`Se ajusta automáticamente la cantidad devuelta a ${usadoVal} para no exceder lo usado.`);
+                    devueltoInput.value = usadoVal;
+                }
+            });
+        });
+    </script>
+
+
+</div>
+
+</body>
+</html>
+

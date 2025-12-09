@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Inicio de sesión - Escuela de Fútbol Pinze</title>
+  <link rel="shortcut icon" th:href="@{/imagenes/logo.jpg}" type="image/x-icon">
   <link rel="stylesheet" href="../css/styles_inicio_sesion.css">
 </head>
 <body>
 
   <header>
-    <a href="../pagina original.html" class="logo" aria-label="Logo Escuela de Fútbol Pinze">
+    <a href="index.html" class="logo" aria-label="Logo Escuela de Fútbol Pinze">
       <img src="../imagenes/logo.jpg" alt="Logo Escuela de Fútbol Pinze" />
     </a>
     <a href="../pagina original.html" class="volver">Volver</a>
@@ -24,10 +25,10 @@
     <div class="Formgrupo">
 
       <label for="correo">Correo</label>
-      <input id="correo" type="email" placeholder="Ingrese su correo" th:field="*{correo}" required>
+      <input id="correo" type="email" placeholder="Ingrese su correo" th:field="*{correo}" name="txt" required>
 
       <label for="contrasena">Contraseña</label>
-      <input id="contrasena" type="password" placeholder="Ingrese su contraseña" th:field="*{contrasena}" required>
+      <input id="contrasena" type="password" placeholder="Ingrese su contraseña" th:field="*{contrasena}" name="txt_" required>
 
     </div>
 
@@ -37,12 +38,10 @@
     <p th:if="${error}" th:text="${error}" style="color:red; margin-top:10px;"></p>
 
   </form>
-
   <div class="extra-links">
     <a href="#">¿Olvidaste tu contraseña?</a>
-    <a href="../registrarseindex.html">Registrarse</a>
   </div>
 </div>
-
+    
 </body>
 </html>

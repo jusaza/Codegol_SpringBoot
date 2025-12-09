@@ -6,6 +6,7 @@ package com.codegol.codegol.controller;
 
 import com.codegol.codegol.model.Usuario;
 import com.codegol.codegol.service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,13 +27,18 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String validarLogin(@ModelAttribute("usuario") Usuario usuario, Model model) {
+    public String validarLogin(@ModelAttribute("usuario") Usuario usuario, Model model, HttpSession session) {
 
         Usuario acceso = usuarioService.buscarPorCorreo(usuario.getCorreo());
 
         if (acceso != null && acceso.getContrasena().equals(usuario.getContrasena())) {
-            return "redirect:/usuarios"; // login correcto
-        }
+
+    session.setAttribute("rol", acceso.getRoles().get(0).getRol_usuario());
+
+
+    return "redirect:/usuarios"; 
+}
+
 
         model.addAttribute("error", "Correo o contraseña incorrectos");
         return "login";
