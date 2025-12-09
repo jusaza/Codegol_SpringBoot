@@ -43,16 +43,30 @@ public class DetallesUtilizaController {
             return "redirect:/entrenamientos";
         }
 
+        // Lista de todos los inventarios activos
         List<Inventario> inventarios = inventarioService.listarActivos();
+
+        // Lista de usos ya registrados para este entrenamiento
         List<DetallesUtiliza> usos = utilizaService.listarPorEntrenamiento(idEntrenamiento);
 
+        // IDs de inventarios ya usados en este entrenamiento
+        List<Integer> usadosIds = usos.stream()
+                .map(u -> u.getInventario().getId_inventario())
+                .toList();
+
+        // Filtrar inventarios que aún no están registrados
+        List<Inventario> disponibles = inventarios.stream()
+                .filter(i -> !usadosIds.contains(i.getId_inventario()))
+                .toList();
+
         model.addAttribute("entrenamiento", entrenamiento);
-        model.addAttribute("inventarios", inventarios);
-        model.addAttribute("usos", usos); // ← NOMBRE CORRECTO PARA LA TABLA
+        model.addAttribute("inventarios", disponibles); // Solo los disponibles
+        model.addAttribute("usos", usos);
         model.addAttribute("nuevoUso", new DetallesUtiliza());
 
         return "entrenamiento/utiliza-table";
     }
+
 
     // ============================================================================
     // REGISTRAR USO
