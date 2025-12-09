@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pago - Escuela de Fútbol Pinze</title>
+
+    <link rel="stylesheet" href="/css/style_forms.css">
+</head>
+
+<body>
+
+<header>
+    <a href="/pago" class="logo">
+        <img src="/imagenes/logo.jpg" alt="Logo Escuela de Fútbol Pinze" />
+    </a>
+    <a href="/pago" class="volver">Volver</a>
+</header>
+
+<div class="login-box">
+    <h1 th:text="${titulo}">Pago</h1>
+
+    <form th:action="@{/pago/guardar}" th:object="${pago}" method="post">
+
+        <div class="Formgrupo">
+            <label>ID Pago</label>
+            <input type="number" th:field="*{idPago}" readonly>
+        </div>
+
+        <div class="Formgrupo">
+            <label>Concepto de Pago</label>
+            <input type="text" th:field="*{conceptoPago}" required>
+        </div>
+
+        <div class="Formgrupo">
+            <label>Fecha de Pago</label>
+            <input type="date" th:field="*{fechaPago}" required>
+        </div>
+
+        <div class="Formgrupo">
+            <label>Método de Pago</label>
+            <select th:field="*{metodoPago}" required>
+                <option value="">Seleccione método</option>
+                <option th:each="m : ${T(com.codegol.codegol.model.Pago.MetodoPago).values()}"
+                        th:value="${m}"
+                        th:text="${m}">
+                </option>
+            </select>
+        </div>
+
+        <div class="Formgrupo">
+            <label>Valor Total</label>
+            <input type="number" step="0.01" th:field="*{valorTotal}" required>
+        </div>
+
+        <div class="Formgrupo">
+            <label>Observaciones</label>
+            <input type="text" th:field="*{observaciones}">
+        </div>
+
+        <!-- USUARIO QUE REGISTRA -->
+        <div class="Formgrupo">
+            <label>Registrado por (Usuario)</label>
+            <select th:field="*{usuario}">
+                <option value="">-- Seleccione --</option>
+                <option th:each="u : ${usuarios}"
+                        th:value="${u.id_usuario}"
+                        th:text="${u.nombre_completo}">
+                </option>
+            </select>
+        </div>
+
+        <!-- RESPONSABLE DEL PAGO -->
+        <div class="Formgrupo">
+            <label>Responsable del Pago</label>
+            <select th:field="*{usuario}">
+                <option value="">-- Seleccione --</option>
+                <option th:each="u : ${usuarios}"
+                        th:value="${u.id_usuario}"
+                        th:text="${u.nombre_completo}">
+                </option>
+            </select>
+        </div>
+
+        <!-- MATRÍCULA -->
+        <div class="Formgrupo">
+            <label>Matrícula</label>
+            <select th:field="*{matricula}">
+                <option value="">-- Seleccione --</option>
+                <option th:each="m : ${matriculas}"
+                        th:value="${m.id_matricula}"
+                        th:text="${m.id_jugador.nombre_completo}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit">Guardar pago</button>
+    </form>
+</div>
+
+</body>
+</html>
+
+
+

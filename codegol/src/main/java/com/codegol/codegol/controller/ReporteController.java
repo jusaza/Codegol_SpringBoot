@@ -14,14 +14,26 @@ public class ReporteController {
     @Autowired
     private ReporteService reporteService;
 
-    @GetMapping("/reporte/pdf")
-    public ResponseEntity<byte[]> generarReporte() throws Exception {
-        byte[] pdf = reporteService.generarPDF();
-
+    // PDF de matrículas
+    @GetMapping("/reporte/matriculas/pdf")
+    public ResponseEntity<byte[]> generarReporteMatriculas() throws Exception {
+        byte[] pdf = reporteService.generarPDFMatriculas();
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=matriculas.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
     }
+
+
+    // PDF de pagos
+    @GetMapping("/reporte/pago/pdf")
+    public ResponseEntity<byte[]> generarReportePagos() throws Exception {
+        byte[] pdf = reporteService.generarPDFPagos();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=pagos.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
 }
+
 
