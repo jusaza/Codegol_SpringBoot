@@ -13,33 +13,40 @@
 
     <!-- BARRA SUPERIOR -->
     <div class="barra-top">
-        <form method="get" action="/matriculas">
-            <!-- Búsqueda por texto (observaciones) -->
-            <input type="text"
-                   name="q"
-                   placeholder="Buscar por observaciones..."
-                   th:value="${q}"
-                   class="barra-busqueda">
+        <div class="barra-busqueda">
+            <form method="get" action="/matriculas">
+                <!-- Búsqueda por texto (observaciones) -->
+                <input type="text"
+                       name="q"
+                       placeholder="Buscar por observaciones..."
+                       th:value="${q}"
+                       style="margin-bottom: 15px;">
 
-            <!-- Búsqueda por fecha de matrícula -->
-            <input type="date"
-                   name="fecha"
-                   th:value="${fecha}"
-                   class="barra-busqueda">
+                <!-- Búsqueda por fecha de matrícula -->
+                <input type="date" name="fecha" value="" style="margin-bottom: 15px;">
 
-            <button type="submit">Buscar</button>
-        </form>
-
-        <a href="/matriculas/nuevo" class="boton-registrar">
-            Registrar matrícula
-        </a>
+                <button type="submit" style="margin 1px;" class="boton-registrar">Buscar</button>
+            </form>
+        </div>
     </div>
 
-    <!-- BOTÓN PARA DESCARGAR PDF -->
-    <div style="margin: 10px 0;">
-        <form th:action="@{/reporte/pdf}" method="get">
-            <button type="submit" class="boton-pdf">Descargar PDF</button>
-        </form>
+    <!-- BOTÓN PARA DESCARGAR PDF Y REGISTRAR MATRÍCULA-->
+    <div style="margin: 10px 0; display: flex; gap: 12px; align-items: center;">
+
+        <div style="flex: 1;">
+            <a href="/matriculas/nuevo" class="boton-registrar" style="display: inline-block; width: 100%; text-align: center;">
+                Registrar matrícula
+            </a>
+        </div>
+
+        <div style="flex: 1;margin-left: 20px;">
+            <form action="/reporte/pdf" method="get" style="margin: 0;">
+                <button type="submit" class="boton-registrar" style="width: 100%;">
+                    Descargar PDF
+                </button>
+            </form>
+        </div>
+
     </div>
 
     <!-- TABLA -->
