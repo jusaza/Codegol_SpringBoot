@@ -75,10 +75,7 @@
         </div>
 
         <!-- PROMEDIO (readonly, calculado en service) -->
-        <div class="Formgrupo">
-            <label>Promedio</label>
-            <input type="number" th:field="*{promedio}" readonly step="0.01" placeholder="Promedio calculado automáticamente">
-        </div>
+        <input type="hidden" th:field="*{promedio}">
 
         <!-- OBSERVACIONES -->
         <div class="Formgrupo">
@@ -87,15 +84,8 @@
         </div>
 
         <!-- ESTADO -->
-        <div class="Formgrupo">
-            <label>Estado</label>
-            <select th:field="*{estado}">
-                <!-- **USAR value (HTML) para cadena vacía — NO usar th:value con cadena vacía** -->
-                <option value="">Seleccione estado</option>
-                <option th:value="true">Activo</option>
-                <option th:value="false">Inactivo</option>
-            </select>
-        </div>
+        <input type="hidden" th:field="*{estado}">
+
 
         <!-- MATRÍCULA -->
         <div class="Formgrupo">

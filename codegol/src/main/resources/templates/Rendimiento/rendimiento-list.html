@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* Asegura visibilidad si tu CSS global previene mostrar la ventana */
         .ventana-flotante {
             display: none;
             position: fixed;
@@ -30,22 +29,47 @@
         }
         .ventana-flotante.active { display: block; }
         .ver-mas { cursor: pointer; }
-        .ventana-flotante .cerrar-detalle { background: transparent; border: none; font-size: 18px; cursor: pointer; }
-        .ventana-flotante canvas { display:block; margin-top:12px; max-width:100%; height:auto; }
+        .ventana-flotante .cerrar-detalle {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .ventana-flotante canvas {
+            display:block;
+            margin-top:12px;
+            max-width:100%;
+            height:auto;
+        }
     </style>
 </head>
 
 <body>
 <div layout:fragment="content">
 
-    <!-- BARRA SUPERIOR -->
-    <div class="barra-top">
-        <form method="get" action="/rendimientos">
-            <input type="text" name="q" placeholder="Buscar rendimiento..." th:value="${q}" class="barra-busqueda" />
-            <button type="submit">Buscar</button>
-        </form>
-        <a th:href="@{/rendimientos/nuevo}" class="boton-registrar">Registrar rendimiento</a>
+    <!-- BARRA SUPERIOR (CORREGIDA LA RUTA) -->
+    <!-- CONTENEDOR DE BOTONES COMO MATRÍCULA/PDF -->
+    <div style="margin: 10px 0; display: flex; gap: 12px; align-items: center;">
+
+        <!-- COLUMNA IZQUIERDA: Botón Registrar rendimiento -->
+        <div style="flex: 1;">
+            <a th:href="@{/rendimientos/nuevo}"
+               class="boton-registrar"
+               style="display: inline-block; width: 100%; text-align: center;">
+                Registrar rendimiento
+            </a>
+        </div>
+
+        <!-- COLUMNA DERECHA: Botón Buscar -->
+        <div style="flex: 1; margin-left: 20px;">
+            <form method="get" action="/rendimientos" style="margin: 0; display: flex; gap: 8px;">
+                <input type="date" name="fecha" th:value="${fecha}" style="padding: 6px; border-radius: 5px; flex: 1;">
+                <input type="text" name="posicion" placeholder="Posición..." th:value="${posicion}" style="padding: 6px; border-radius: 5px; flex: 1;">
+                <button type="submit" class="boton-registrar" style="width: 100%;">Buscar</button>
+            </form>
+        </div>
     </div>
+
 
     <!-- TABLA -->
     <table>
@@ -65,14 +89,15 @@
             <td th:text="${r.posicion}"></td>
             <td th:text="${r.velocidad}"></td>
             <td class="acciones">
-                <!-- USAR th:attr para garantizar el atributo data-id -->
-                <button type="button" class="ver-mas" th:attr="data-id=${r.id_rendimiento}">Ver más</button>
+                <button type="button" class="ver-mas" th:data-id="${r.id_rendimiento}">Ver más</button>
 
-                <a th:href="@{/rendimientos/editar/{id}(id=${r.id_rendimiento})}">
+                <a style="color: inherit; text-decoration: none;"
+                   th:href="@{/rendimientos/editar/{id}(id=${r.id_rendimiento})}">
                     <button type="button" class="actualizar">Actualizar</button>
                 </a>
 
-                <a th:href="@{/rendimientos/eliminar/{id}(id=${r.id_rendimiento})}">
+                <a style="color: inherit; text-decoration: none;"
+                   th:href="@{/rendimientos/eliminar/{id}(id=${r.id_rendimiento})}">
                     <button type="button" class="eliminar">Eliminar</button>
                 </a>
             </td>
@@ -80,22 +105,22 @@
         </tbody>
     </table>
 
-    <!-- VENTANAS FLOTANTES DINÁMICAS -->
-    <!-- Agrego data-* con los valores; el JS leerá dataset (más robusto que indexar spans) -->
+    <!-- VENTANA FLOTANTE CON DATASETS CORREGIDOS -->
     <div th:each="r : ${rendimientos}"
          th:id="'detalle-usuario-' + ${r.id_rendimiento}"
          class="ventana-flotante"
          role="dialog"
          aria-hidden="true"
-         th:attr="
-           data-velocidad=${r.velocidad},
-           data-potencia=${r.potencia_tiro},
-           data-defensa=${r.defensa},
-           data-regate=${r.regate},
-           data-pase=${r.pase},
-           data-tecnica=${r.tecnica},
-           data-promedio=${r.promedio},
-           data-observaciones=${r.observaciones}">
+
+         th:data-velocidad="${r.velocidad}"
+         th:data-potencia="${r.potencia_tiro}"
+         th:data-defensa="${r.defensa}"
+         th:data-regate="${r.regate}"
+         th:data-pase="${r.pase}"
+         th:data-tecnica="${r.tecnica}"
+         th:data-promedio="${r.promedio}"
+         th:data-observaciones="${r.observaciones}"
+    >
         <button type="button" class="cerrar-detalle" style="float:right">Cerrar ×</button>
 
         <ul>
@@ -120,122 +145,92 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('[DEBUG] DOMContentLoaded - handlers ver-mas instalando');
 
-      const charts = {};
+        const charts = {};
 
-      function toNum(v) {
-        if (v === undefined || v === null) return 0;
-        const n = parseFloat(String(v).trim());
-        return Number.isFinite(n) ? n : 0;
-      }
+        function toNum(v) {
+            if (v === undefined || v === null) return 0;
+            const n = parseFloat(String(v).trim());
+            return Number.isFinite(n) ? n : 0;
+        }
 
-      // Delegation: un solo listener para cualquier .ver-mas
-      document.addEventListener('click', (evt) => {
-        const btn = evt.target.closest && evt.target.closest('.ver-mas');
-        if (!btn) return;
+        document.addEventListener('click', (evt) => {
+            const btn = evt.target.closest('.ver-mas');
+            if (!btn) return;
 
-        try {
-          const id = btn.getAttribute('data-id') || btn.dataset.id;
-          console.log('[DEBUG] ver-mas clicked id=', id);
-          if (!id) {
-            console.error('[ERROR] data-id faltante en botón ver-mas', btn);
-            return;
-          }
+            const id = btn.dataset.id;
+            const ventana = document.getElementById('detalle-usuario-' + id);
+            ventana.classList.add('active');
+            ventana.setAttribute('aria-hidden', 'false');
 
-          const ventana = document.getElementById('detalle-usuario-' + id);
-          if (!ventana) {
-            console.error('[ERROR] no existe detalle-usuario-' + id);
-            return;
-          }
-
-          // Mostrar ventana
-          ventana.classList.add('active');
-          ventana.setAttribute('aria-hidden', 'false');
-
-          // Botón cerrar interno
-          const cerrarBtn = ventana.querySelector('.cerrar-detalle');
-          if (cerrarBtn) {
+            const cerrarBtn = ventana.querySelector('.cerrar-detalle');
             cerrarBtn.onclick = () => {
-              ventana.classList.remove('active');
-              ventana.setAttribute('aria-hidden', 'true');
+                ventana.classList.remove('active');
+                ventana.setAttribute('aria-hidden','true');
             };
-          }
 
-          // Leer datos desde data-* del propio div
-          const ds = ventana.dataset;
-          const velocidad = toNum(ds.velocidad);
-          const potencia  = toNum(ds.potencia);
-          const defensa   = toNum(ds.defensa);
-          const regate    = toNum(ds.regate);
-          const pase      = toNum(ds.pase);
-          const tecnica   = toNum(ds.tecnica);
+            const ds = ventana.dataset;
+            const dataValues = [
+                toNum(ds.velocidad),
+                toNum(ds.potencia),
+                toNum(ds.defensa),
+                toNum(ds.regate),
+                toNum(ds.pase),
+                toNum(ds.tecnica)
+            ];
 
-          console.log('[DEBUG] dataset values', {velocidad, potencia, defensa, regate, pase, tecnica});
+            const canvasId = 'graficaRadarDetalle-' + id;
+            const canvas = document.getElementById(canvasId);
 
-          const dataValues = [velocidad, potencia, defensa, regate, pase, tecnica];
-          const canvasId = 'graficaRadarDetalle-' + id;
-          const canvas = document.getElementById(canvasId);
+            if (charts[canvasId]) charts[canvasId].destroy();
 
-          if (!canvas) {
-            console.error('[ERROR] canvas no encontrado:', canvasId);
-            return;
-          }
-
-          // destruir chart anterior si existe
-          if (charts[canvasId]) {
-            try { charts[canvasId].destroy(); } catch (e) { console.warn('[WARN] error destruyendo chart previo', e); }
-            charts[canvasId] = null;
-          }
-
-          // crear nuevo Chart
-          const ctx = canvas.getContext('2d');
-          charts[canvasId] = new Chart(ctx, {
-            type: 'radar',
-            data: {
-              labels: ['Velocidad', 'Potencia Tiro', 'Defensa', 'Regate', 'Pase', 'Técnica'],
-              datasets: [{
-                label: 'Rendimiento',
-                data: dataValues,
-                backgroundColor: 'rgba(15, 88, 151, 0.2)',
-                borderColor: '#0f5897',
-                borderWidth: 2,
-                pointBackgroundColor: '#0f5897'
-              }]
-            },
-            options: {
-              responsive: true,
-              scales: { r: { min: 0, max: 100, ticks: { stepSize: 20 } } }
-            }
-          });
-
-        } catch (err) {
-          console.error('[ERROR] en handler ver-mas:', err);
-        }
-      });
-
-      // cerrar ventana si clic fuera (no se cierra si clic dentro)
-      window.addEventListener('click', (e) => {
-        if (e.target.closest('.ver-mas')) return;
-        document.querySelectorAll('.ventana-flotante.active').forEach(v => {
-          if (v.contains(e.target)) return;
-          v.classList.remove('active');
-          v.setAttribute('aria-hidden','true');
+            const ctx = canvas.getContext('2d');
+            charts[canvasId] = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Velocidad', 'Potencia Tiro', 'Defensa', 'Regate', 'Pase', 'Técnica'],
+                    datasets: [{
+                        label: 'Rendimiento',
+                        data: dataValues,
+                        backgroundColor: 'rgba(15, 88, 151, 0.2)',
+                        borderColor: '#0f5897',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#0f5897'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            min: 0,
+                            max: 100,
+                            ticks: { stepSize: 20 }
+                        }
+                    }
+                }
+            });
         });
-      });
 
-      // cerrar con ESC
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          document.querySelectorAll('.ventana-flotante.active').forEach(v => {
-            v.classList.remove('active');
-            v.setAttribute('aria-hidden','true');
-          });
-        }
-      });
+        window.addEventListener('click', (e) => {
+            document.querySelectorAll('.ventana-flotante.active').forEach(v => {
+                if (!v.contains(e.target)) {
+                    v.classList.remove('active');
+                    v.setAttribute('aria-hidden','true');
+                }
+            });
+        });
 
-      console.log('[DEBUG] handlers ver-mas instalados (dataset).');
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.ventana-flotante.active').forEach(v => {
+                    v.classList.remove('active');
+                    v.setAttribute('aria-hidden','true');
+                });
+            }
+        });
+
     });
 </script>
+
 </body>
 </html>
