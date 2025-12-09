@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rendimiento - Escuela de Fútbol Pinze</title>
+    <link rel="stylesheet" th:href="@{/css/style_pag_prin.css}" />
+    <link rel="stylesheet" th:href="@{/css/stylepag.css}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Asegura visibilidad si tu CSS global previene mostrar la ventana */
+        .ventana-flotante {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            z-index: 9999;
+            max-width: 90%;
+            max-height: 90%;
+            overflow:auto;
+            border-radius:8px;
+        }
+        .ventana-flotante.active { display: block; }
+        .ver-mas { cursor: pointer; }
+        .ventana-flotante .cerrar-detalle { background: transparent; border: none; font-size: 18px; cursor: pointer; }
+        .ventana-flotante canvas { display:block; margin-top:12px; max-width:100%; height:auto; }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <!-- BARRA SUPERIOR -->
+    <div class="barra-top">
+        <form method="get" action="/rendimientos">
+            <input type="text" name="q" placeholder="Buscar rendimiento..." th:value="${q}" class="barra-busqueda" />
+            <button type="submit">Buscar</button>
+        </form>
+        <a th:href="@{/rendimientos/nuevo}" class="boton-registrar">Registrar rendimiento</a>
+    </div>
+
+    <!-- TABLA -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Posición</th>
+            <th>Velocidad</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${rendimientos}">
+            <td th:text="${r.id_rendimiento}"></td>
+            <td th:text="${r.fecha_evaluacion}"></td>
+            <td th:text="${r.posicion}"></td>
+            <td th:text="${r.velocidad}"></td>
+            <td class="acciones">
+                <!-- USAR th:attr para garantizar el atributo data-id -->
+                <button type="button" class="ver-mas" th:attr="data-id=${r.id_rendimiento}">Ver más</button>
+
+                <a th:href="@{/rendimientos/editar/{id}(id=${r.id_rendimiento})}">
+                    <button type="button" class="actualizar">Actualizar</button>
+                </a>
+
+                <a th:href="@{/rendimientos/eliminar/{id}(id=${r.id_rendimiento})}">
+                    <button type="button" class="eliminar">Eliminar</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- VENTANAS FLOTANTES DINÁMICAS -->
+    <!-- Agrego data-* con los valores; el JS leerá dataset (más robusto que indexar spans) -->
+    <div th:each="r : ${rendimientos}"
+         th:id="'detalle-usuario-' + ${r.id_rendimiento}"
+         class="ventana-flotante"
+         role="dialog"
+         aria-hidden="true"
+         th:attr="
+           data-velocidad=${r.velocidad},
+           data-potencia=${r.potencia_tiro},
+           data-defensa=${r.defensa},
+           data-regate=${r.regate},
+           data-pase=${r.pase},
+           data-tecnica=${r.tecnica},
+           data-promedio=${r.promedio},
+           data-observaciones=${r.observaciones}">
+        <button type="button" class="cerrar-detalle" style="float:right">Cerrar ×</button>
+
+        <ul>
+            <li><strong>ID Rendimiento:</strong> <span th:text="${r.id_rendimiento}"></span></li>
+            <li><strong>Fecha Evaluación:</strong> <span th:text="${r.fecha_evaluacion}"></span></li>
+            <li><strong>Posición:</strong> <span th:text="${r.posicion}"></span></li>
+            <li><strong>Velocidad:</strong> <span th:text="${r.velocidad}"></span></li>
+            <li><strong>Potencia Tiro:</strong> <span th:text="${r.potencia_tiro}"></span></li>
+            <li><strong>Defensa:</strong> <span th:text="${r.defensa}"></span></li>
+            <li><strong>Regate:</strong> <span th:text="${r.regate}"></span></li>
+            <li><strong>Pase:</strong> <span th:text="${r.pase}"></span></li>
+            <li><strong>Técnica:</strong> <span th:text="${r.tecnica}"></span></li>
+            <li><strong>Promedio:</strong> <span th:text="${r.promedio}"></span></li>
+            <li><strong>Observaciones:</strong> <span th:text="${r.observaciones}"></span></li>
+            <li><strong>Estado:</strong> <span th:text="${r.estado} ? 'Activo' : 'Inactivo'"></span></li>
+        </ul>
+
+        <canvas th:id="'graficaRadarDetalle-' + ${r.id_rendimiento}" width="400" height="400"></canvas>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('[DEBUG] DOMContentLoaded - handlers ver-mas instalando');
+
+      const charts = {};
+
+      function toNum(v) {
+        if (v === undefined || v === null) return 0;
+        const n = parseFloat(String(v).trim());
+        return Number.isFinite(n) ? n : 0;
+      }
+
+      // Delegation: un solo listener para cualquier .ver-mas
+      document.addEventListener('click', (evt) => {
+        const btn = evt.target.closest && evt.target.closest('.ver-mas');
+        if (!btn) return;
+
+        try {
+          const id = btn.getAttribute('data-id') || btn.dataset.id;
+          console.log('[DEBUG] ver-mas clicked id=', id);
+          if (!id) {
+            console.error('[ERROR] data-id faltante en botón ver-mas', btn);
+            return;
+          }
+
+          const ventana = document.getElementById('detalle-usuario-' + id);
+          if (!ventana) {
+            console.error('[ERROR] no existe detalle-usuario-' + id);
+            return;
+          }
+
+          // Mostrar ventana
+          ventana.classList.add('active');
+          ventana.setAttribute('aria-hidden', 'false');
+
+          // Botón cerrar interno
+          const cerrarBtn = ventana.querySelector('.cerrar-detalle');
+          if (cerrarBtn) {
+            cerrarBtn.onclick = () => {
+              ventana.classList.remove('active');
+              ventana.setAttribute('aria-hidden', 'true');
+            };
+          }
+
+          // Leer datos desde data-* del propio div
+          const ds = ventana.dataset;
+          const velocidad = toNum(ds.velocidad);
+          const potencia  = toNum(ds.potencia);
+          const defensa   = toNum(ds.defensa);
+          const regate    = toNum(ds.regate);
+          const pase      = toNum(ds.pase);
+          const tecnica   = toNum(ds.tecnica);
+
+          console.log('[DEBUG] dataset values', {velocidad, potencia, defensa, regate, pase, tecnica});
+
+          const dataValues = [velocidad, potencia, defensa, regate, pase, tecnica];
+          const canvasId = 'graficaRadarDetalle-' + id;
+          const canvas = document.getElementById(canvasId);
+
+          if (!canvas) {
+            console.error('[ERROR] canvas no encontrado:', canvasId);
+            return;
+          }
+
+          // destruir chart anterior si existe
+          if (charts[canvasId]) {
+            try { charts[canvasId].destroy(); } catch (e) { console.warn('[WARN] error destruyendo chart previo', e); }
+            charts[canvasId] = null;
+          }
+
+          // crear nuevo Chart
+          const ctx = canvas.getContext('2d');
+          charts[canvasId] = new Chart(ctx, {
+            type: 'radar',
+            data: {
+              labels: ['Velocidad', 'Potencia Tiro', 'Defensa', 'Regate', 'Pase', 'Técnica'],
+              datasets: [{
+                label: 'Rendimiento',
+                data: dataValues,
+                backgroundColor: 'rgba(15, 88, 151, 0.2)',
+                borderColor: '#0f5897',
+                borderWidth: 2,
+                pointBackgroundColor: '#0f5897'
+              }]
+            },
+            options: {
+              responsive: true,
+              scales: { r: { min: 0, max: 100, ticks: { stepSize: 20 } } }
+            }
+          });
+
+        } catch (err) {
+          console.error('[ERROR] en handler ver-mas:', err);
+        }
+      });
+
+      // cerrar ventana si clic fuera (no se cierra si clic dentro)
+      window.addEventListener('click', (e) => {
+        if (e.target.closest('.ver-mas')) return;
+        document.querySelectorAll('.ventana-flotante.active').forEach(v => {
+          if (v.contains(e.target)) return;
+          v.classList.remove('active');
+          v.setAttribute('aria-hidden','true');
+        });
+      });
+
+      // cerrar con ESC
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.ventana-flotante.active').forEach(v => {
+            v.classList.remove('active');
+            v.setAttribute('aria-hidden','true');
+          });
+        }
+      });
+
+      console.log('[DEBUG] handlers ver-mas instalados (dataset).');
+    });
+</script>
+</body>
+</html>

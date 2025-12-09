@@ -44,5 +44,8 @@ public class EntrenamientoService {
             entrenamientoRepository.save(entrenamiento);
         }
     }
+    public List<Entrenamiento> listarTodas() {
+        return entrenamientoRepository.findAll();
+    }
 }
 

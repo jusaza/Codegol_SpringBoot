@@ -42,5 +42,7 @@ public class MatriculaService {
             matriculaRepository.save(matricula);
         }
     }
-
+    public List<Matricula> listarTodas() {
+        return matriculaRepository.findAll();
+    }
 }
