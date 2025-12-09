@@ -14,8 +14,8 @@
       <div class="barra-busqueda">
         <input type="text" placeholder="Buscar usuario...">
       </div>
-      <a href="/usuarios/nuevo" class="boton-registrar">Registrar nuevo usuario</a>
-      <a href="/usuarios/inactivos" class="boton-registrar">Ver inactivos</a>
+      <a th:if="${session.rol == 'Administrador'}" href="/usuarios/nuevo" class="boton-registrar">Registrar nuevo usuario</a>
+      <a th:if="${session.rol == 'Administrador'}" href="/usuarios/inactivos" class="boton-registrar">Ver inactivos</a>
     </div>
       
     <div th:if="${error}" class="alert alert-danger" role="alert"> <span th:text="${error}"></span> </div>
