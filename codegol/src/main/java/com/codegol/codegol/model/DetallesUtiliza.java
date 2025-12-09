@@ -15,15 +15,23 @@ public class DetallesUtiliza {
     @Column(nullable = false)
     private int cantidad_usada;
 
+    @PositiveOrZero
+    private int cantidad_devuelta = 0;
+
+
+    private boolean devuelto = false;
+
+    // cantidad del inventario ANTES de usarlo
+    @PositiveOrZero
+    private int cantidad_inicial;
+
     @Size(max = 100)
     private String observaciones;
 
-    // 🔗 MUCHOS usos pertenecen a un entrenamiento
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_entrenamiento", nullable = false)
     private Entrenamiento entrenamiento;
 
-    // 🔗 MUCHOS usos pertenecen a un inventario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_inventario", nullable = false)
     private Inventario inventario;
@@ -44,6 +52,30 @@ public class DetallesUtiliza {
 
     public void setCantidad_usada(int cantidad_usada) {
         this.cantidad_usada = cantidad_usada;
+    }
+
+    public int getCantidad_devuelta() {
+        return cantidad_devuelta;
+    }
+
+    public void setCantidad_devuelta(int cantidad_devuelta) {
+        this.cantidad_devuelta = cantidad_devuelta;
+    }
+
+    public boolean isDevuelto() {
+        return devuelto;
+    }
+
+    public void setDevuelto(boolean devuelto) {
+        this.devuelto = devuelto;
+    }
+
+    public int getCantidad_inicial() {
+        return cantidad_inicial;
+    }
+
+    public void setCantidad_inicial(int cantidad_inicial) {
+        this.cantidad_inicial = cantidad_inicial;
     }
 
     public String getObservaciones() {

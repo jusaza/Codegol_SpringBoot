@@ -59,14 +59,11 @@
                         th:onclick="'location.href=\'/asistencia/' + ${e.id_entrenamiento} + '\''">
                     Asistencia
                 </button>
-                <!--
-                <button class="eliminar" style="background-color: yellow;">
-                    <a style="color: inherit; text-decoration: none;"
-                       th:href="">
-                        Utiliza
-                    </a>
+
+                <button class="eliminar" style="background-color: green;"
+                        th:onclick="'location.href=\'/utiliza/' + ${e.id_entrenamiento} + '\''">
+                    Utiliza
                 </button>
-                -->
             </td>
 
             <td class="acciones">
