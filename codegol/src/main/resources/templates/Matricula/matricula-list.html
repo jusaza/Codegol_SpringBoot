@@ -13,7 +13,7 @@
 
     <!-- BARRA SUPERIOR -->
     <div class="barra-top">
-        <form method="get" action="/matriculas">
+        <form method="get" action="/matriculas" class="barra-busqueda">
             <!-- Búsqueda por texto (observaciones) -->
             <input type="text"
                    name="q"
@@ -27,20 +27,19 @@
                    th:value="${fecha}"
                    class="barra-busqueda">
 
-            <button type="submit">Buscar</button>
+            <button type="submit" class="boton-registrar">Buscar</button>
+
+
+            <a href="/matriculas/nuevo" class="boton-registrar">
+                Registrar matrícula
+            </a>
         </form>
-
-        <a href="/matriculas/nuevo" class="boton-registrar">
-            Registrar matrícula
-        </a>
-    </div>
-
-    <!-- BOTÓN PARA DESCARGAR PDF -->
-    <div style="margin: 10px 0;">
-        <form th:action="@{/reporte/pdf}" method="get">
-            <button type="submit" class="boton-pdf">Descargar PDF</button>
+        <!-- BOTÓN PARA DESCARGAR PDF -->
+        <form th:action="@{/reporte/matriculas/pdf}" method="get">
+            <button type="submit" class="boton-registrar">Descargar PDF</button>
         </form>
     </div>
+
 
     <!-- TABLA -->
     <table>

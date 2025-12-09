@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pagos - Escuela de Fútbol Pinze</title>
+
+    <!-- RUTAS CORREGIDAS -->
+    <link rel="stylesheet" href="/css/style_pag_prin.css">
+    <link rel="stylesheet" href="/css/stylepag.css">
+</head>
+
+<body>
+<aside class="menu">
+    <a href="/" class="logo">
+        <img src="/imagenes/logo.jpg" alt="Logo Escuela de Fútbol Pinze" />
+    </a>
+
+    <h2>⚽ Menú ⚽</h2>
+    <ul>
+        <li><a href="/usuarios">Usuarios</a></li>
+        <li><a href="/entrenamientos">Entrenamiento</a></li>
+        <li><a href="/inventario">Inventario</a></li>
+        <li><a href="/rendimientos">Rendimiento</a></li>
+        <li><a href="/matriculas">Matrícula</a></li>
+        <li><a href="/pagos">Pago</a></li>
+    </ul>
+
+    <a href="/" class="cerrar-sesion">Cerrar sesión</a>
+</aside>
+
+<div class="contenido">
+    <div class="barra-top">
+        <div class="barra-busqueda">
+            <input type="text" placeholder="Buscar pago...">
+        </div>
+
+        <a href="/pago/registrar" class="boton-registrar">Registrar pago</a>
+
+        <form th:action="@{/reporte/pago/pdf}" method="get">
+            <button type="submit" class="boton-registrar">Descargar PDF</button>
+        </form>
+    </div>
+
+    <!-- TABLA DINÁMICA -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID Pago</th>
+            <th>Concepto</th>
+            <th>Fecha Pago</th>
+            <th>Método Pago</th>
+            <th>Valor Total</th>
+            <th>Observaciones</th>
+            <th>Pago por (ID)</th>
+            <th>ID Matrícula</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pago : ${listaPagos}">
+            <td th:text="${pago.idPago}"></td>
+            <td th:text="${pago.conceptoPago}"></td>
+            <td th:text="${pago.fechaPago}"></td>
+            <td th:text="${pago.metodoPago}"></td>
+            <td th:text="${pago.valorTotal}"></td>
+            <td th:text="${pago.observaciones}"></td>
+            <td th:text="${pago.usuario != null ? pago.usuario.nombre_completo : 'Sin usuario'}"></td>
+            <td th:text="${pago.matricula != null && pago.matricula.id_jugador != null ? pago.matricula.id_jugador.nombre_completo : 'Sin jugador'}"></td>
+            <td class="acciones">
+                <a th:href="@{'/pago/editar/' + ${pago.idPago}}">
+                    <button class="actualizar">Actualizar</button>
+                </a>
+                <a th:href="@{'/pago/eliminar/' + ${pago.idPago}}">
+                    <button class="eliminar">Eliminar</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+</body>
+</html>
+
