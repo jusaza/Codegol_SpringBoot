@@ -21,9 +21,40 @@ public class Rendimiento {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha_evaluacion;
 
-    @NotBlank
-    @Size(max = 60)
-    private String posicion;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 60)
+    private Posicion posicion;
+
+    public enum Posicion {
+
+        portero("Portero"),
+
+        defensa_central("Defensa central"),
+        lateral_derecho("Lateral derecho"),
+        lateral_izquierdo("Lateral izquierdo"),
+
+        mediocentro_defensivo("Mediocentro defensivo"),
+        mediocentro("Mediocentro"),
+        mediocentro_ofensivo("Mediocentro ofensivo"),
+
+        extremo_derecho("Extremo derecho"),
+        extremo_izquierdo("Extremo izquierdo"),
+
+        delantero_centro("Delantero centro"),
+        segundo_delantero("Segundo delantero");
+
+        private final String label;
+
+        Posicion(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
+
+
 
     @NotNull
     private int velocidad;
@@ -72,8 +103,14 @@ public class Rendimiento {
     public LocalDate getFecha_evaluacion() { return fecha_evaluacion; }
     public void setFecha_evaluacion(LocalDate fecha_evaluacion) { this.fecha_evaluacion = fecha_evaluacion; }
 
-    public String getPosicion() { return posicion; }
-    public void setPosicion(String posicion) { this.posicion = posicion; }
+    public Posicion getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(Posicion posicion) {
+        this.posicion = posicion;
+    }
+
 
     public int getVelocidad() { return velocidad; }
     public void setVelocidad(int velocidad) { this.velocidad = velocidad; }

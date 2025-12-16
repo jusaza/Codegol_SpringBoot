@@ -13,9 +13,19 @@ public class DetallesAsiste {
 
     // ---------------- ENUM de asistencia ----------------
     public enum TipoAsistencia {
-        asiste,
-        inasiste,
-        llegada_tarde
+        asiste("Asiste"),
+        inasiste("Inasiste"),
+        llegada_tarde("Llegada tarde");
+
+        private final String label;
+
+        TipoAsistencia(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
     }
 
     @Enumerated(EnumType.STRING)

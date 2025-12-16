@@ -60,7 +60,7 @@
         <tr th:each="r : ${rendimientos}">
             <td th:text="${r.id_rendimiento}"></td>
             <td th:text="${r.fecha_evaluacion}"></td>
-            <td th:text="${r.posicion}"></td>
+            <td th:text="${r.posicion.label}"></td>
             <td th:text="${r.velocidad}"></td>
             <td th:text="${r.potencia_tiro}"></td>
             <td th:text="${r.defensa}"></td>
