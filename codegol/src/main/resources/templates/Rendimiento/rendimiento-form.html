@@ -119,7 +119,13 @@
             <select th:field="*{matricula.id_matricula}" required>
                 <!-- placeholder numérico (para binds a int) -->
                 <option th:value="0">Seleccione matrícula</option>
-                <option th:each="m : ${matriculas}" th:value="${m.id_matricula}" th:text="${m.id_matricula}"></option>
+                <option th:each="m : ${matriculas}"
+                        th:value="${m.id_matricula}"
+                        th:text="'#' + ${m.id_matricula} + ' | ' +
+                 ${m.id_jugador.nombre_completo} + ' | ' +
+                 ${m.id_jugador.tipo_documento} + ' ' +
+                 ${m.id_jugador.num_identificacion}">
+                </option>
             </select>
         </div>
 
