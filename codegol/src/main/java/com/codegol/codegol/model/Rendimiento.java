@@ -44,7 +44,7 @@ public class Rendimiento {
     private int tecnica;
 
     // si la columna en la DB es GENERATED ALWAYS AS (...), evitar que JPA intente escribirla
-    @Column(precision = 5, scale = 2, insertable = false, updatable = false)
+    @Column(precision = 5, scale = 2)
     private BigDecimal promedio;
 
 
@@ -93,8 +93,8 @@ public class Rendimiento {
     public int getTecnica() { return tecnica; }
     public void setTecnica(int tecnica) { this.tecnica = tecnica; }
 
-    public BigDecimal getPromedio() { return promedio; }
-    public void setPromedio(BigDecimal promedio) { this.promedio = promedio; }
+    public BigDecimal getPromedio() {return promedio;}
+    public void setPromedio(BigDecimal promedio) {this.promedio = promedio;}
 
     public String getObservaciones() { return observaciones; }
     public void setObservaciones(String observaciones) { this.observaciones = observaciones; }

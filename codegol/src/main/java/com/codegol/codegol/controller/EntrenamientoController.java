@@ -1,7 +1,6 @@
 package com.codegol.codegol.controller;
 
 import com.codegol.codegol.model.Entrenamiento;
-import com.codegol.codegol.model.Usuario;
 import com.codegol.codegol.service.EntrenamientoService;
 import com.codegol.codegol.service.UsuarioService;
 
