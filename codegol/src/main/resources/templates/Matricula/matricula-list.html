@@ -92,6 +92,14 @@
                         Eliminar
                     </a>
                 </button>
+
+
+                <!-- Formulario para descargar el PDF de la matrícula individual -->
+                <form th:action="@{/reporte/matricula/{id}/pdf(id=${m.id_matricula})}" method="get">
+                    <button type="submit" class="boton-registrar">
+                        Descargar Matrícula
+                    </button>
+                </form>
             </td>
         </tr>
         </tbody>
