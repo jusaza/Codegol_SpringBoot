@@ -1,35 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Pagos - Escuela de Fútbol Pinze</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/menu.html">
 
-    <!-- RUTAS CORREGIDAS -->
-    <link rel="stylesheet" href="/css/style_pag_prin.css">
-    <link rel="stylesheet" href="/css/stylepag.css">
+<head>
+    <title>Matrículas - Codegol</title>
 </head>
 
 <body>
-<aside class="menu">
-    <a href="/" class="logo">
-        <img src="/imagenes/logo.jpg" alt="Logo Escuela de Fútbol Pinze" />
-    </a>
-
-    <h2>⚽ Menú ⚽</h2>
-    <ul>
-        <li><a href="/usuarios">Usuarios</a></li>
-        <li><a href="/entrenamientos">Entrenamiento</a></li>
-        <li><a href="/inventario">Inventario</a></li>
-        <li><a href="/rendimientos">Rendimiento</a></li>
-        <li><a href="/matriculas">Matrícula</a></li>
-        <li><a href="/pagos">Pago</a></li>
-    </ul>
-
-    <a href="/" class="cerrar-sesion">Cerrar sesión</a>
-</aside>
-
-<div class="contenido">
+<div layout:fragment="content">
     <div class="barra-top">
         <div class="barra-busqueda">
             <input type="text" placeholder="Buscar pago...">
