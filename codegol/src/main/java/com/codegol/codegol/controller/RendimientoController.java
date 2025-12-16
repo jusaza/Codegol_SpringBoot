@@ -158,4 +158,11 @@ public class RendimientoController {
         rendimientoService.eliminar(id);
         return "redirect:/rendimientos";
     }
+
+    @PostMapping("/guardar")
+    public String guardar(Rendimiento e) {
+        rendimientoService.guardar(e);
+        return "redirect:/rendimientos";
+    }
+
 }

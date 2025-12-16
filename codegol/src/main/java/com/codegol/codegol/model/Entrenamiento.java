@@ -1,8 +1,8 @@
 package com.codegol.codegol.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
+        import jakarta.validation.constraints.*;
+        import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -118,4 +118,3 @@ public class Entrenamiento {
         this.usuario = usuario;
     }
 }
-
