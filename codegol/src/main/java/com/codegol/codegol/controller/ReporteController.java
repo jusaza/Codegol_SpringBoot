@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,6 +14,20 @@ public class ReporteController {
 
     @Autowired
     private ReporteService reporteService;
+
+
+
+    @GetMapping("/reporte/matricula/{id}/pdf")
+    public ResponseEntity<byte[]> generarReporteMatriculaIndividual(@PathVariable("id") int matriculaId) throws Exception {
+        byte[] pdf = reporteService.generarPDFMatriculaIndividual(matriculaId);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=matricula_" + matriculaId + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
+
 
     // PDF de matrículas
     @GetMapping("/reporte/matriculas/pdf")

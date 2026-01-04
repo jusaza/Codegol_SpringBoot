@@ -35,8 +35,34 @@
         <!-- POSICIÓN -->
         <div class="Formgrupo">
             <label>Posición</label>
-            <input type="text" th:field="*{posicion}" maxlength="60" placeholder="Ingrese la posición del jugador" required>
+            <select th:field="*{posicion}" required>
+
+                <option value="">Seleccione una posición</option>
+
+                <!-- PORTERO -->
+                <option value="portero">Portero (GK)</option>
+
+                <!-- DEFENSAS -->
+                <option value="defensa_central">Defensa central (DFC)</option>
+                <option value="lateral_derecho">Lateral derecho (LD)</option>
+                <option value="lateral_izquierdo">Lateral izquierdo (LI)</option>
+                <option value="carrilero_derecho">Carrilero derecho (CAD)</option>
+                <option value="carrilero_izquierdo">Carrilero izquierdo (CAI)</option>
+
+                <!-- MEDIOCAMPISTAS -->
+                <option value="mediocentro_defensivo">Mediocentro defensivo (MCD / Pivote)</option>
+                <option value="mediocentro">Mediocentro (MC)</option>
+                <option value="mediocentro_ofensivo">Mediocentro ofensivo (MCO)</option>
+                <option value="interior_derecho">Interior derecho (ID)</option>
+                <option value="interior_izquierdo">Interior izquierdo (II)</option>
+
+                <!-- EXTREMOS -->
+                <option value="extremo_derecho">Extremo derecho (ED)</option>
+                <option value="extremo_izquierdo">Extremo izquierdo (EI)</option>
+
+            </select>
         </div>
+
 
         <!-- VELOCIDAD -->
         <div class="Formgrupo">
@@ -101,7 +127,13 @@
             <select th:field="*{matricula.id_matricula}" required>
                 <!-- placeholder numérico (para binds a int) -->
                 <option th:value="0">Seleccione matrícula</option>
-                <option th:each="m : ${matriculas}" th:value="${m.id_matricula}" th:text="${m.id_matricula}"></option>
+                <option th:each="m : ${matriculas}"
+                        th:value="${m.id_matricula}"
+                        th:text="'#' + ${m.id_matricula} + ' | ' +
+                 ${m.id_jugador.nombre_completo} + ' | ' +
+                 ${m.id_jugador.tipo_documento} + ' ' +
+                 ${m.id_jugador.num_identificacion}">
+                </option>
             </select>
         </div>
 

@@ -1,21 +1,26 @@
+document.addEventListener("DOMContentLoaded", function () {
 
-    const btnVerMas = document.querySelectorAll('.ver-mas');
-    const ventanas = document.querySelectorAll('.ventana-flotante');
+    const inputBusqueda = document.getElementById("buscarUsuario");
+    const filas = document.querySelectorAll("tbody tr");
 
-    btnVerMas.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        const ventana = document.getElementById('detalle-usuario-' + id);
-        ventana.classList.add('active');
-      });
+    inputBusqueda.addEventListener("keyup", function () {
+        const texto = inputBusqueda.value.toLowerCase();
+
+        filas.forEach(fila => {
+            const correo = fila.children[0].textContent.toLowerCase();
+            const nombre = fila.children[1].textContent.toLowerCase();
+            const identificacion = fila.children[2].textContent.toLowerCase();
+
+            if (
+                correo.includes(texto) ||
+                nombre.includes(texto) ||
+                identificacion.includes(texto)
+            ) {
+                fila.style.display = "";
+            } else {
+                fila.style.display = "none";
+            }
+        });
     });
+});
 
-    window.addEventListener('click', function(e) {
-      ventanas.forEach(ventana => {
-        if (ventana.classList.contains('active') &&
-            !ventana.contains(e.target) &&
-            !e.target.classList.contains('ver-mas')) {
-          ventana.classList.remove('active');
-        }
-      });
-    });
